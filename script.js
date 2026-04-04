@@ -322,15 +322,8 @@ const websitesData = [
         categoryName: '软件'
     },
     {
-        name: 'IntelliJ IDEA',
-        url: 'https://www.jetbrains.com/idea/',
-        icon: 'https://image.songzq.cn/logo/idea.ico',
-        desc: 'JetBrains开发的Java IDE',
-        categoryName: '软件'
-    },
-    {
         name: 'Trae',
-        url: 'https://trae.io/',
+        url: 'https://www.trae.cn/',
         icon: 'https://image.songzq.cn/logo/trae.ico',
         desc: 'AI驱动的开发工具',
         categoryName: '软件'
@@ -352,7 +345,7 @@ const websitesData = [
     {
         name: 'Typora',
         url: 'https://typora.io/',
-        icon: 'https://image.songzq.cn/logo/typora.ico',
+        icon: 'https://image.songzq.cn/logo/typora.png',
         desc: 'Markdown编辑器',
         categoryName: '软件'
     },
@@ -373,7 +366,7 @@ const websitesData = [
     {
         name: '万方',
         url: 'https://www.wanfangdata.com.cn/',
-        icon: 'https://image.songzq.cn/logo/wanfang.ico',
+        icon: 'https://image.songzq.cn/logo/wanfangdata.ico',
         desc: '万方数据知识服务平台',
         categoryName: '其它'
     },
