@@ -1,0 +1,10 @@
+[
+    { "name": "百度", "icon": "https://image.songzq.cn/logo/baidu.ico", "url": "https://www.baidu.com/s?wd=" },
+    { "name": "必应", "icon": "https://image.songzq.cn/logo/bing.ico", "url": "https://www.bing.com/search?q=" },
+    { "name": "搜狗", "icon": "https://image.songzq.cn/logo/sogou.ico", "url": "https://www.sogou.com/web?query=" },
+    { "name": "Google", "icon": "https://image.songzq.cn/logo/google.ico", "url": "https://www.google.com/search?q=" },
+    { "name": "Yandex", "icon": "https://image.songzq.cn/logo/yandex.ico", "url": "https://yandex.com/search/?text=" },
+    { "name": "Qwant", "icon": "https://image.songzq.cn/logo/qwant.png", "url": "https://www.qwant.com/?q=" },
+    { "name": "Brave", "icon": "https://image.songzq.cn/logo/brave.svg", "url": "https://search.brave.com/search?q=" },
+    { "name": "GitHub", "icon": "https://image.songzq.cn/logo/github.svg", "url": "https://github.com/search?q=" }
+]

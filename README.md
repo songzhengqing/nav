@@ -58,12 +58,15 @@
 
 ```
 nav/
-├── index.html      # 主页面HTML结构
-├── style.css       # 样式文件
-├── script.js       # JavaScript逻辑代码
-├── logo/           # 网站图标资源目录
-│   └── favicon.jpg # 网站favicon
-└── README.md       # 项目说明文档
+├── index.html          # 主页面HTML结构
+├── style.css           # 样式文件
+├── script.js           # JavaScript逻辑代码
+├── data/               # 数据文件目录
+│   ├── searchEngines.json  # 搜索引擎配置
+│   └── websitesData.json   # 网站数据配置
+├── logo/               # 网站图标资源目录
+│   └── favicon.jpg     # 网站favicon
+└── README.md           # 项目说明文档
 ```
 
 ## 技术栈
@@ -107,13 +110,13 @@ npx serve
 
 ### 修改搜索引擎
 
-在 `script.js` 文件中修改 `searchEngines` 数组：
+在 `data/searchEngines.json` 文件中修改搜索引擎配置：
 
-```javascript
-const searchEngines = [
-    { name: '百度', icon: '图标URL', url: 'https://www.baidu.com/s?wd=' },
-    // 添加更多搜索引擎...
-];
+```json
+[
+    { "name": "百度", "icon": "图标URL", "url": "https://www.baidu.com/s?wd=" },
+    { "name": "必应", "icon": "图标URL", "url": "https://www.bing.com/search?q=" }
+]
 ```
 
 ### 修改网站分类
@@ -126,19 +129,18 @@ const categoriesData = ['工作', '影音', '学习&考试', 'AI', '境外网站
 
 ### 添加/修改网站
 
-在 `script.js` 文件中修改 `websitesData` 数组：
+在 `data/websitesData.json` 文件中修改网站数据：
 
-```javascript
-const websitesData = [
+```json
+[
     {
-        name: '网站名称',
-        url: 'https://example.com',
-        icon: '图标URL',
-        desc: '网站描述',
-        categoryName: '分类名称'
-    },
-    // 添加更多网站...
-];
+        "name": "网站名称",
+        "url": "https://example.com",
+        "icon": "图标URL",
+        "desc": "网站描述",
+        "categoryName": "分类名称"
+    }
+]
 ```
 
 ### 修改背景图片
