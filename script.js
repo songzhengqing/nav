@@ -177,84 +177,84 @@ const websitesData = [
     {
         name: '学信网',
         url: 'https://www.chsi.com.cn/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/chsi.ico',
         desc: '中国高等教育学生信息网',
         categoryName: '学习&考试'
     },
     {
         name: 'Deepseek',
         url: 'https://chat.deepseek.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/deepseek.ico',
         desc: '深度求索AI对话',
         categoryName: 'AI'
     },
     {
         name: '元宝',
         url: 'https://yuanbao.tencent.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/yuanbao.ico',
         desc: '腾讯元宝AI助手',
         categoryName: 'AI'
     },
     {
         name: '秘塔',
         url: 'https://metaso.cn/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/metaso.ico',
         desc: '秘塔AI写作助手',
         categoryName: 'AI'
     },
     {
         name: 'Kimi',
         url: 'https://www.kimi.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/kimi.ico',
         desc: '月之暗面AI助手',
         categoryName: 'AI'
     },
     {
         name: '豆包',
         url: 'https://www.doubao.com/chat/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/doubao.ico',
         desc: '字节跳动AI助手',
         categoryName: 'AI'
     },
     {
         name: '文心一言',
         url: 'https://yiyan.baidu.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/yiyan.ico',
         desc: '百度AI对话助手',
         categoryName: 'AI'
     },
     {
         name: '通义千问',
         url: 'https://www.qianwen.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/qianwen.ico',
         desc: '阿里巴巴AI助手',
         categoryName: 'AI'
     },
     {
         name: '龙猫',
         url: 'https://longcat.chat/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/longcat.svg',
         desc: '美团龙猫AI助手',
         categoryName: 'AI'
     },
     {
         name: 'Gmail',
         url: 'https://mail.google.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/gmail.ico',
         desc: '谷歌邮箱服务',
         categoryName: '境外网站'
     },
     {
         name: 'Instagram',
         url: 'https://www.instagram.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/instagram.webp',
         desc: '图片分享社交平台',
         categoryName: '境外网站'
     },
     {
         name: 'YouTube',
         url: 'https://www.youtube.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/youtube.ico',
         desc: '全球视频分享平台',
         categoryName: '境外网站'
     },
