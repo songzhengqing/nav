@@ -184,7 +184,7 @@ const websitesData = [
     {
         name: 'Deepseek',
         url: 'https://chat.deepseek.com/',
-        icon: 'https://image.songzq.cn/logo/deepseek.ico',
+        icon: 'https://image.songzq.cn/logo/deepseek.svg',
         desc: '深度求索AI对话',
         categoryName: 'AI'
     },
