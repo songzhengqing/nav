@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正清 の 导航页</title>
+    <link rel="icon" href="https://image.songzq.cn/avatar_yuan.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="front-page">
+            <div class="background" id="background"></div>
+            <div class="container">
+                <div class="time-date">
+                    <div class="time" id="currentTime"></div>
+                    <div class="date" id="currentDate"></div>
+                </div>
+                
+                <div class="search-container">
+                    <div class="search-box">
+                        <div class="search-engine" id="searchEngineBtn">
+                            <img id="searchIcon" alt="搜索引擎">
+                            <div class="search-engines-dropdown" id="searchEnginesDropdown"></div>
+                        </div>
+                        <input type="text" class="search-input" id="searchInput" placeholder="搜索...">
+                        <div class="search-suggestions" id="searchSuggestions"></div>
+                        <button class="search-button" id="searchButton">🔍</button>
+                    </div>
+                </div>
+                
+                <div class="category-tabs" id="categoryTabs"></div>
+                
+                <div class="websites-container">
+                    <div class="websites-grid" id="websitesGrid"></div>
+                </div>
+                
+                <div class="footer"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
