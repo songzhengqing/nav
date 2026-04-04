@@ -275,7 +275,7 @@ const websitesData = [
     {
         name: 'Facebook',
         url: 'https://www.facebook.com/',
-        icon: 'https://image.songzq.cn/logo/facebook.ico',
+        icon: 'https://image.songzq.cn/logo/facebook.webp',
         desc: '全球社交网络平台',
         categoryName: '境外网站'
     },
@@ -401,7 +401,7 @@ const websitesData = [
     {
         name: 'iconfont',
         url: 'https://www.iconfont.cn/',
-        icon: 'https://image.songzq.cn/logo/iconfont.ico',
+        icon: 'https://image.songzq.cn/logo/iconfont.svg',
         desc: 'iconfont-国内功能很强大且图标内容很丰富的矢量图标库，提供矢量图标下载、在线存储、格式转换等功能。阿里巴巴体验团队倾力打造，设计和前端开发的便捷工具',
         categoryName: '其它'
     },
@@ -417,13 +417,6 @@ const websitesData = [
         url: 'https://www.hello-algo.com/',
         icon: 'https://image.songzq.cn/logo/helloalgo.ico',
         desc: '算法学习网站',
-        categoryName: '其它'
-    },
-    {
-        name: 'Learn-anything',
-        url: 'https://learn-anything.xyz/',
-        icon: 'https://image.songzq.cn/logo/learnanything.ico',
-        desc: '学习资源导航',
         categoryName: '其它'
     },
     {
@@ -443,14 +436,14 @@ const websitesData = [
     {
         name: 'PaywallBuster',
         url: 'https://paywallbuster.com/',
-        icon: 'https://image.songzq.cn/logo/paywallbuster.ico',
+        icon: 'https://image.songzq.cn/logo/paywallbuster.png',
         desc: '付费内容解锁工具',
         categoryName: '其它'
     },
     {
         name: '阿里云',
         url: 'https://www.aliyun.com/',
-        icon: 'https://image.songzq.cn/logo/aliyun.ico',
+        icon: 'https://image.songzq.cn/logo/aliyun.webp',
         desc: '阿里云,AI,大模型,千问,云服务器,云数据库,域名注册备案',
         categoryName: '其它'
     }
