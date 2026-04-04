@@ -62,8 +62,7 @@ nav/
 ├── style.css       # 样式文件
 ├── script.js       # JavaScript逻辑代码
 ├── logo/           # 网站图标资源目录
-│   ├── favicon.jpg # 网站favicon
-│   └── error.png   # 图标加载失败时的默认图片
+│   └── favicon.jpg # 网站favicon
 └── README.md       # 项目说明文档
 ```
 
@@ -150,6 +149,14 @@ const websitesData = [
 backgroundElement.style.backgroundImage = `url('你的背景图片URL')`;
 ```
 
+### 修改默认占位图标
+
+在 `script.js` 文件的 `renderWebsites()` 函数中修改 `onerror` 属性：
+
+```javascript
+<img src="${website.icon}" alt="${website.name}" onerror="this.src='你的默认图标URL'">
+```
+
 ## 数据结构
 
 ### 搜索引擎对象
@@ -202,7 +209,7 @@ backgroundElement.style.backgroundImage = `url('你的背景图片URL')`;
 
 1. 部分内网网站（如大藤峡相关系统）仅在内网环境下可访问
 2. 境外网站需要网络环境支持
-3. 网站图标加载失败时会显示默认错误图标
+3. 网站图标加载失败时会显示默认占位图标
 
 ## 作者
 

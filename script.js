@@ -65,14 +65,14 @@ const websitesData = [
     {
         name: '天玥运维安全网关',
         url: 'https://10.7.61.195/client/login/index',
-        icon: 'http://10.7.61.195/favicon.ico',
+        icon: 'https://image.songzq.cn/logo/yunwei.ico',
         desc: '天玥运维安全访问网关',
         categoryName: '工作'
     },
     {
         name: '中国水利教育培训网',
         url: 'http://cwet.mwr.cn/lms/app/lms/portal/Portal/index.do',
-        icon: 'http://cwet.mwr.cn/favicon.ico',
+        icon: 'https://image.songzq.cn/logo/cwet.png',
         desc: '水利系统教育培训平台',
         categoryName: '工作'
     },
@@ -538,7 +538,7 @@ function renderWebsites() {
     websitesGridElement.innerHTML = filteredWebsites.map(website => `
         <div class="website-item" data-url="${website.url}">
             <div class="website-icon">
-                <img src="${website.icon}" alt="${website.name}" onerror="this.src='./logo/error.png'">
+                <img src="${website.icon}" alt="${website.name}" onerror="this.src='https://image.songzq.cn/other/02cb165d016fa0c02e01fe2321325df9.jpg'">
             </div>
             <div class="website-info">
                 <div class="website-name">${website.name}</div>
