@@ -16,7 +16,7 @@ const websitesData = [
     {
         name: '珠江委OA系统',
         url: 'http://10.7.1.153/OA/userLogins.do',
-        icon: 'http://10.7.1.153/favicon.ico',
+        icon: 'https://image.songzq.cn/logo/pearlwater.ico',
         desc: '珠江水利委员会办公自动化系统',
         categoryName: '工作'
     },
@@ -387,7 +387,7 @@ const websitesData = [
     {
         name: '珠江委',
         url: 'https://www.pearlwater.gov.cn/',
-        icon: 'http://www.pearlwater.gov.cn/favicon.ico',
+        icon: 'https://image.songzq.cn/logo/pearlwater.ico',
         desc: '珠江水利委员会',
         categoryName: '其它'
     },
