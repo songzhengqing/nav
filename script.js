@@ -79,7 +79,7 @@ const websitesData = [
     {
         name: '腾讯文档',
         url: 'https://docs.qq.com/desktop/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/tencentdocs.ico',
         desc: '在线文档协作平台',
         categoryName: '工作'
     },
@@ -114,21 +114,21 @@ const websitesData = [
     {
         name: '国家开放大学',
         url: 'https://one.ouchn.cn/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/ouchn.ico',
         desc: '国家开放大学学习平台',
         categoryName: '学习&考试'
     },
     {
         name: '广西开放大学',
         url: 'https://lms.ouchn.cn/user/index#/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/gxouchn.ico',
         desc: '广西开放大学学习平台',
         categoryName: '学习&考试'
     },
     {
         name: '广东省教育考试院',
         url: 'https://eea.gd.gov.cn/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/gdeea.ico',
         desc: '广东省教育考试信息发布',
         categoryName: '学习&考试'
     },
@@ -142,28 +142,28 @@ const websitesData = [
     {
         name: 'PETS',
         url: 'https://pets.neea.edu.cn/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/pets.ico',
         desc: '全国英语等级考试',
         categoryName: '学习&考试'
     },
     {
         name: '广东自考管理系统',
         url: 'https://www.eeagd.edu.cn/zkselfec/login/login.jsp',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/gdzk.ico',
         desc: '广东省自学考试管理系统',
         categoryName: '学习&考试'
     },
     {
         name: '深圳大学计算机继续教育办公室',
         url: 'https://csse.szu.edu.cn/zk/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/szu.ico',
         desc: '深圳大学计算机继续教育',
         categoryName: '学习&考试'
     },
     {
         name: '科科过-软考培训',
         url: 'https://www.kekeguo.net/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/kekeguo.ico',
         desc: '软考培训专业机构',
         categoryName: '学习&考试'
     },
@@ -261,98 +261,98 @@ const websitesData = [
     {
         name: 'Messenger',
         url: 'https://www.messenger.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/messenger.ico',
         desc: 'Facebook即时通讯',
         categoryName: '境外网站'
     },
     {
         name: 'Telegram',
         url: 'https://web.telegram.org/a/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/telegram.ico',
         desc: '加密即时通讯应用',
         categoryName: '境外网站'
     },
     {
         name: 'Facebook',
         url: 'https://www.facebook.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/facebook.ico',
         desc: '全球社交网络平台',
         categoryName: '境外网站'
     },
     {
         name: 'Reddit',
         url: 'https://www.reddit.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/reddit.ico',
         desc: '社交新闻聚合平台',
         categoryName: '境外网站'
     },
     {
         name: 'X',
         url: 'https://x.com/home',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/x.ico',
         desc: '原Twitter社交平台',
         categoryName: '境外网站'
     },
     {
         name: 'Twitch',
         url: 'https://www.twitch.tv/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/twitch.ico',
         desc: '游戏直播平台',
         categoryName: '境外网站'
     },
     {
         name: 'WhatsApp',
         url: 'https://www.whatsapp.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/whatsapp.ico',
         desc: '跨平台即时通讯',
         categoryName: '境外网站'
     },
     {
         name: 'Pinterest',
         url: 'https://www.pinterest.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/pinterest.ico',
         desc: '图片分享社交平台',
         categoryName: '境外网站'
     },
     {
         name: 'VS Code',
         url: 'https://code.visualstudio.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/vscode.ico',
         desc: '微软开发的免费代码编辑器',
         categoryName: '软件'
     },
     {
         name: 'IntelliJ IDEA',
         url: 'https://www.jetbrains.com/idea/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/idea.ico',
         desc: 'JetBrains开发的Java IDE',
         categoryName: '软件'
     },
     {
         name: 'Trae',
         url: 'https://trae.io/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/trae.ico',
         desc: 'AI驱动的开发工具',
         categoryName: '软件'
     },
     {
         name: 'Postman',
         url: 'https://www.postman.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/postman.ico',
         desc: 'API开发和测试工具',
         categoryName: '软件'
     },
     {
         name: 'Navicat',
         url: 'https://www.navicat.com.cn/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/navicat.ico',
         desc: '数据库管理工具',
         categoryName: '软件'
     },
     {
         name: 'Typora',
         url: 'https://typora.io/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/typora.ico',
         desc: 'Markdown编辑器',
         categoryName: '软件'
     },
@@ -366,21 +366,21 @@ const websitesData = [
     {
         name: '知网',
         url: 'https://www.cnki.net/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/cnki.ico',
         desc: '中国知网学术文献平台',
         categoryName: '其它'
     },
     {
         name: '万方',
         url: 'https://www.wanfangdata.com.cn/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/wanfang.ico',
         desc: '万方数据知识服务平台',
         categoryName: '其它'
     },
     {
         name: '水利部',
         url: 'http://www.mwr.gov.cn/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/mwr.ico',
         desc: '中华人民共和国水利部',
         categoryName: '其它'
     },
@@ -394,63 +394,63 @@ const websitesData = [
     {
         name: '珠江委技术中心',
         url: 'http://www.zwjszx.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/zwjszx.ico',
         desc: '珠江委技术咨询中心',
         categoryName: '其它'
     },
     {
         name: 'iconfont',
         url: 'https://www.iconfont.cn/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/iconfont.ico',
         desc: 'iconfont-国内功能很强大且图标内容很丰富的矢量图标库，提供矢量图标下载、在线存储、格式转换等功能。阿里巴巴体验团队倾力打造，设计和前端开发的便捷工具',
         categoryName: '其它'
     },
     {
         name: 'CSDN',
         url: 'https://www.csdn.net/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/csdn.ico',
         desc: '程序员技术社区',
         categoryName: '其它'
     },
     {
         name: 'Hello算法',
         url: 'https://www.hello-algo.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/helloalgo.ico',
         desc: '算法学习网站',
         categoryName: '其它'
     },
     {
         name: 'Learn-anything',
         url: 'https://learn-anything.xyz/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/learnanything.ico',
         desc: '学习资源导航',
         categoryName: '其它'
     },
     {
         name: 'DataTool',
         url: 'https://www.datatool.vip/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/datatool.ico',
         desc: '数据处理工具集合',
         categoryName: '其它'
     },
     {
         name: 'GreenVideo',
         url: 'https://greenvideo.cc/video/player',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/greenvideo.ico',
         desc: '视频在线播放',
         categoryName: '其它'
     },
     {
         name: 'PaywallBuster',
         url: 'https://paywallbuster.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/paywallbuster.ico',
         desc: '付费内容解锁工具',
         categoryName: '其它'
     },
     {
         name: '阿里云',
         url: 'https://www.aliyun.com/',
-        icon: '',
+        icon: 'https://image.songzq.cn/logo/aliyun.ico',
         desc: '阿里云,AI,大模型,千问,云服务器,云数据库,域名注册备案',
         categoryName: '其它'
     }
