@@ -148,7 +148,7 @@ const websitesData = [
     },
     {
         name: '广东自考管理系统',
-        url: 'https://www.eeagd.edu.cn/zkselfec/login/login.jsp',
+        url: 'https://www.eeagd.edu.cn/zkselfec/',
         icon: 'https://image.songzq.cn/logo/gdzk.ico',
         desc: '广东省自学考试管理系统',
         categoryName: '学习&考试'
