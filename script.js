@@ -79,280 +79,280 @@ const websitesData = [
     {
         name: '腾讯文档',
         url: 'https://docs.qq.com/desktop/',
-        icon: 'http://docs.qq.com/favicon.ico',
+        icon: '',
         desc: '在线文档协作平台',
         categoryName: '工作'
     },
     {
         name: '爱奇艺',
         url: 'https://www.iqiyi.com',
-        icon: 'http://www.iqiyi.com/favicon.ico',
+        icon: 'https://image.songzq.cn/logo/iqiyi.ico',
         desc: '高清视频在线观看平台',
         categoryName: '影音'
     },
     {
         name: '抖音',
         url: 'https://www.douyin.com',
-        icon: 'http://www.douyin.com/favicon.ico',
+        icon: 'https://image.songzq.cn/logo/douyin.ico',
         desc: '短视频分享平台',
         categoryName: '影音'
     },
     {
         name: '哔哩哔哩',
         url: 'https://www.bilibili.com',
-        icon: 'http://www.bilibili.com/favicon.ico',
+        icon: 'https://image.songzq.cn/logo/bilibili.ico',
         desc: '年轻人喜爱的视频网站',
         categoryName: '影音'
     },
     {
         name: '腾讯视频',
         url: 'https://v.qq.com',
-        icon: 'http://v.qq.com/favicon.ico',
+        icon: 'https://image.songzq.cn/logo/txsp.ico',
         desc: '腾讯视频在线观看',
         categoryName: '影音'
     },
     {
         name: '国家开放大学',
         url: 'https://one.ouchn.cn/',
-        icon: 'http://one.ouchn.cn/favicon.ico',
+        icon: '',
         desc: '国家开放大学学习平台',
         categoryName: '学习&考试'
     },
     {
         name: '广西开放大学',
         url: 'https://lms.ouchn.cn/user/index#/',
-        icon: 'http://lms.ouchn.cn/favicon.ico',
+        icon: '',
         desc: '广西开放大学学习平台',
         categoryName: '学习&考试'
     },
     {
         name: '广东省教育考试院',
         url: 'https://eea.gd.gov.cn/',
-        icon: 'http://eea.gd.gov.cn/favicon.ico',
+        icon: '',
         desc: '广东省教育考试信息发布',
         categoryName: '学习&考试'
     },
     {
         name: '计算机职业资格网',
         url: 'https://www.ruankao.org.cn/',
-        icon: 'http://www.ruankao.org.cn/favicon.ico',
+        icon: 'https://image.songzq.cn/logo/ruankao.ico',
         desc: '计算机技术与软件专业技术资格考试',
         categoryName: '学习&考试'
     },
     {
         name: 'PETS',
         url: 'https://pets.neea.edu.cn/',
-        icon: 'http://pets.neea.edu.cn/favicon.ico',
+        icon: '',
         desc: '全国英语等级考试',
         categoryName: '学习&考试'
     },
     {
         name: '广东自考管理系统',
         url: 'https://www.eeagd.edu.cn/zkselfec/login/login.jsp',
-        icon: 'http://www.eeagd.edu.cn/favicon.ico',
+        icon: '',
         desc: '广东省自学考试管理系统',
         categoryName: '学习&考试'
     },
     {
         name: '深圳大学计算机继续教育办公室',
         url: 'https://csse.szu.edu.cn/zk/',
-        icon: 'http://csse.szu.edu.cn/favicon.ico',
+        icon: '',
         desc: '深圳大学计算机继续教育',
         categoryName: '学习&考试'
     },
     {
         name: '科科过-软考培训',
         url: 'https://www.kekeguo.net/',
-        icon: 'http://www.kekeguo.net/favicon.ico',
+        icon: '',
         desc: '软考培训专业机构',
         categoryName: '学习&考试'
     },
     {
         name: '笔果',
         url: 'https://www.biguotk.com/',
-        icon: 'http://www.biguotk.com/favicon.ico',
+        icon: 'https://image.songzq.cn/logo/biguotk.ico',
         desc: '考试备考资料平台',
         categoryName: '学习&考试'
     },
     {
         name: '学信网',
         url: 'https://www.chsi.com.cn/',
-        icon: 'http://www.chsi.com.cn/favicon.ico',
+        icon: '',
         desc: '中国高等教育学生信息网',
         categoryName: '学习&考试'
     },
     {
         name: 'Deepseek',
         url: 'https://chat.deepseek.com/',
-        icon: 'http://chat.deepseek.com/favicon.ico',
+        icon: '',
         desc: '深度求索AI对话',
         categoryName: 'AI'
     },
     {
         name: '元宝',
         url: 'https://yuanbao.tencent.com/',
-        icon: 'http://yuanbao.tencent.com/favicon.ico',
+        icon: '',
         desc: '腾讯元宝AI助手',
         categoryName: 'AI'
     },
     {
         name: '秘塔',
         url: 'https://metaso.cn/',
-        icon: 'http://metaso.cn/favicon.ico',
+        icon: '',
         desc: '秘塔AI写作助手',
         categoryName: 'AI'
     },
     {
         name: 'Kimi',
         url: 'https://www.kimi.com/',
-        icon: 'http://www.kimi.com/favicon.ico',
+        icon: '',
         desc: '月之暗面AI助手',
         categoryName: 'AI'
     },
     {
         name: '豆包',
         url: 'https://www.doubao.com/chat/',
-        icon: 'http://www.doubao.com/favicon.ico',
+        icon: '',
         desc: '字节跳动AI助手',
         categoryName: 'AI'
     },
     {
         name: '文心一言',
         url: 'https://yiyan.baidu.com/',
-        icon: 'http://yiyan.baidu.com/favicon.ico',
+        icon: '',
         desc: '百度AI对话助手',
         categoryName: 'AI'
     },
     {
         name: '通义千问',
         url: 'https://www.qianwen.com/',
-        icon: 'http://www.qianwen.com/favicon.ico',
+        icon: '',
         desc: '阿里巴巴AI助手',
         categoryName: 'AI'
     },
     {
         name: '龙猫',
         url: 'https://longcat.chat/',
-        icon: 'http://longcat.chat/favicon.ico',
+        icon: '',
         desc: '美团龙猫AI助手',
         categoryName: 'AI'
     },
     {
         name: 'Gmail',
         url: 'https://mail.google.com/',
-        icon: 'http://mail.google.com/favicon.ico',
+        icon: '',
         desc: '谷歌邮箱服务',
         categoryName: '境外网站'
     },
     {
         name: 'Instagram',
         url: 'https://www.instagram.com/',
-        icon: 'http://www.instagram.com/favicon.ico',
+        icon: '',
         desc: '图片分享社交平台',
         categoryName: '境外网站'
     },
     {
         name: 'YouTube',
         url: 'https://www.youtube.com/',
-        icon: 'http://www.youtube.com/favicon.ico',
+        icon: '',
         desc: '全球视频分享平台',
         categoryName: '境外网站'
     },
     {
         name: 'Messenger',
         url: 'https://www.messenger.com/',
-        icon: 'http://www.messenger.com/favicon.ico',
+        icon: '',
         desc: 'Facebook即时通讯',
         categoryName: '境外网站'
     },
     {
         name: 'Telegram',
         url: 'https://web.telegram.org/a/',
-        icon: 'http://web.telegram.org/favicon.ico',
+        icon: '',
         desc: '加密即时通讯应用',
         categoryName: '境外网站'
     },
     {
         name: 'Facebook',
         url: 'https://www.facebook.com/',
-        icon: 'http://www.facebook.com/favicon.ico',
+        icon: '',
         desc: '全球社交网络平台',
         categoryName: '境外网站'
     },
     {
         name: 'Reddit',
         url: 'https://www.reddit.com/',
-        icon: 'http://www.reddit.com/favicon.ico',
+        icon: '',
         desc: '社交新闻聚合平台',
         categoryName: '境外网站'
     },
     {
         name: 'X',
         url: 'https://x.com/home',
-        icon: 'http://x.com/favicon.ico',
+        icon: '',
         desc: '原Twitter社交平台',
         categoryName: '境外网站'
     },
     {
         name: 'Twitch',
         url: 'https://www.twitch.tv/',
-        icon: 'http://www.twitch.tv/favicon.ico',
+        icon: '',
         desc: '游戏直播平台',
         categoryName: '境外网站'
     },
     {
         name: 'WhatsApp',
         url: 'https://www.whatsapp.com/',
-        icon: 'http://www.whatsapp.com/favicon.ico',
+        icon: '',
         desc: '跨平台即时通讯',
         categoryName: '境外网站'
     },
     {
         name: 'Pinterest',
         url: 'https://www.pinterest.com/',
-        icon: 'http://www.pinterest.com/favicon.ico',
+        icon: '',
         desc: '图片分享社交平台',
         categoryName: '境外网站'
     },
     {
         name: 'VS Code',
         url: 'https://code.visualstudio.com/',
-        icon: 'http://code.visualstudio.com/favicon.ico',
+        icon: '',
         desc: '微软开发的免费代码编辑器',
         categoryName: '软件'
     },
     {
         name: 'IntelliJ IDEA',
         url: 'https://www.jetbrains.com/idea/',
-        icon: 'http://www.jetbrains.com/favicon.ico',
+        icon: '',
         desc: 'JetBrains开发的Java IDE',
         categoryName: '软件'
     },
     {
         name: 'Trae',
         url: 'https://trae.io/',
-        icon: 'http://trae.io/favicon.ico',
+        icon: '',
         desc: 'AI驱动的开发工具',
         categoryName: '软件'
     },
     {
         name: 'Postman',
         url: 'https://www.postman.com/',
-        icon: 'http://www.postman.com/favicon.ico',
+        icon: '',
         desc: 'API开发和测试工具',
         categoryName: '软件'
     },
     {
         name: 'Navicat',
         url: 'https://www.navicat.com.cn/',
-        icon: 'http://www.navicat.com.cn/favicon.ico',
+        icon: '',
         desc: '数据库管理工具',
         categoryName: '软件'
     },
     {
         name: 'Typora',
         url: 'https://typora.io/',
-        icon: 'http://typora.io/favicon.ico',
+        icon: '',
         desc: 'Markdown编辑器',
         categoryName: '软件'
     },
@@ -366,21 +366,21 @@ const websitesData = [
     {
         name: '知网',
         url: 'https://www.cnki.net/',
-        icon: 'http://www.cnki.net/favicon.ico',
+        icon: '',
         desc: '中国知网学术文献平台',
         categoryName: '其它'
     },
     {
         name: '万方',
         url: 'https://www.wanfangdata.com.cn/',
-        icon: 'http://www.wanfangdata.com.cn/favicon.ico',
+        icon: '',
         desc: '万方数据知识服务平台',
         categoryName: '其它'
     },
     {
         name: '水利部',
         url: 'http://www.mwr.gov.cn/',
-        icon: 'http://www.mwr.gov.cn/favicon.ico',
+        icon: '',
         desc: '中华人民共和国水利部',
         categoryName: '其它'
     },
@@ -394,63 +394,63 @@ const websitesData = [
     {
         name: '珠江委技术中心',
         url: 'http://www.zwjszx.com/',
-        icon: 'http://www.zwjszx.com/favicon.ico',
+        icon: '',
         desc: '珠江委技术咨询中心',
         categoryName: '其它'
     },
     {
         name: 'iconfont',
         url: 'https://www.iconfont.cn/',
-        icon: 'http://www.iconfont.cn/favicon.ico',
+        icon: '',
         desc: 'iconfont-国内功能很强大且图标内容很丰富的矢量图标库，提供矢量图标下载、在线存储、格式转换等功能。阿里巴巴体验团队倾力打造，设计和前端开发的便捷工具',
         categoryName: '其它'
     },
     {
         name: 'CSDN',
         url: 'https://www.csdn.net/',
-        icon: 'http://www.csdn.net/favicon.ico',
+        icon: '',
         desc: '程序员技术社区',
         categoryName: '其它'
     },
     {
         name: 'Hello算法',
         url: 'https://www.hello-algo.com/',
-        icon: 'http://www.hello-algo.com/favicon.ico',
+        icon: '',
         desc: '算法学习网站',
         categoryName: '其它'
     },
     {
         name: 'Learn-anything',
         url: 'https://learn-anything.xyz/',
-        icon: 'http://learn-anything.xyz/favicon.ico',
+        icon: '',
         desc: '学习资源导航',
         categoryName: '其它'
     },
     {
         name: 'DataTool',
         url: 'https://www.datatool.vip/',
-        icon: 'http://www.datatool.vip/favicon.ico',
+        icon: '',
         desc: '数据处理工具集合',
         categoryName: '其它'
     },
     {
         name: 'GreenVideo',
         url: 'https://greenvideo.cc/video/player',
-        icon: 'http://greenvideo.cc/favicon.ico',
+        icon: '',
         desc: '视频在线播放',
         categoryName: '其它'
     },
     {
         name: 'PaywallBuster',
         url: 'https://paywallbuster.com/',
-        icon: 'http://paywallbuster.com/favicon.ico',
+        icon: '',
         desc: '付费内容解锁工具',
         categoryName: '其它'
     },
     {
         name: '阿里云',
         url: 'https://www.aliyun.com/',
-        icon: 'http://www.aliyun.com/favicon.ico',
+        icon: '',
         desc: '阿里云,AI,大模型,千问,云服务器,云数据库,域名注册备案',
         categoryName: '其它'
     }
@@ -480,7 +480,7 @@ function updateDateTime() {
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
     currentTimeElement.textContent = `${hours}:${minutes}:${seconds}`;
-    
+
     const year = now.getFullYear();
     const month = (now.getMonth() + 1).toString().padStart(2, '0');
     const day = now.getDate().toString().padStart(2, '0');
@@ -497,7 +497,7 @@ function renderSearchEngines() {
             <span>${engine.name}</span>
         </div>
     `).join('');
-    
+
     searchEnginesDropdown.querySelectorAll('.search-engine-option').forEach(option => {
         option.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -520,7 +520,7 @@ function renderCategoryTabs() {
             ${category}
         </button>
     `).join('');
-    
+
     categoryTabsElement.querySelectorAll('.category-tab').forEach(tab => {
         tab.addEventListener('click', () => {
             activeCategory = tab.dataset.category;
@@ -531,14 +531,15 @@ function renderCategoryTabs() {
 }
 
 function renderWebsites() {
-    const filteredWebsites = activeCategory === '全部' 
-        ? websitesData 
+    const defaultIcon = 'https://image.songzq.cn/other/02cb165d016fa0c02e01fe2321325df9.jpg';
+    const filteredWebsites = activeCategory === '全部'
+        ? websitesData
         : websitesData.filter(website => website.categoryName === activeCategory);
-    
+
     websitesGridElement.innerHTML = filteredWebsites.map(website => `
         <div class="website-item" data-url="${website.url}">
             <div class="website-icon">
-                <img src="${website.icon}" alt="${website.name}" onerror="this.src='https://image.songzq.cn/other/02cb165d016fa0c02e01fe2321325df9.jpg'">
+                <img src="${website.icon || defaultIcon}" alt="${website.name}" onerror="this.src='${defaultIcon}'">
             </div>
             <div class="website-info">
                 <div class="website-name">${website.name}</div>
@@ -546,7 +547,7 @@ function renderWebsites() {
             </div>
         </div>
     `).join('');
-    
+
     websitesGridElement.querySelectorAll('.website-item').forEach(item => {
         item.addEventListener('click', () => {
             window.open(item.dataset.url, '_blank');
@@ -575,8 +576,8 @@ function handleSearchInput() {
 function getSearchSuggestions(query) {
     const callbackName = 'handleSuggestions_' + Date.now();
     const apiUrl = `https://api.bing.com/osjson.aspx?query=${encodeURIComponent(query)}&jsonp=${callbackName}`;
-    
-    window[callbackName] = function(data) {
+
+    window[callbackName] = function (data) {
         if (data && data[1] && Array.isArray(data[1])) {
             searchSuggestions = data[1].map(text => ({ text, desc: '', icon: '' }));
             renderSearchSuggestions();
@@ -584,10 +585,10 @@ function getSearchSuggestions(query) {
         delete window[callbackName];
         document.head.removeChild(script);
     };
-    
+
     const script = document.createElement('script');
     script.src = apiUrl;
-    script.onerror = function() {
+    script.onerror = function () {
         delete window[callbackName];
         document.head.removeChild(script);
     };
@@ -602,7 +603,7 @@ function renderSearchSuggestions() {
             </div>
         `).join('');
         searchSuggestionsElement.classList.add('show');
-        
+
         searchSuggestionsElement.querySelectorAll('.search-suggestion-item').forEach(item => {
             item.addEventListener('click', () => {
                 searchInput.value = item.dataset.text;
@@ -621,23 +622,23 @@ function initEventListeners() {
         showSearchEngines = !showSearchEngines;
         searchEnginesDropdown.classList.toggle('show', showSearchEngines);
     });
-    
+
     searchButton.addEventListener('click', performSearch);
-    
+
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             performSearch();
         }
     });
-    
+
     searchInput.addEventListener('input', handleSearchInput);
-    
+
     document.addEventListener('click', (e) => {
         if (!searchEngineBtn.contains(e.target)) {
             searchEnginesDropdown.classList.remove('show');
             showSearchEngines = false;
         }
-        
+
         if (!searchInput.contains(e.target) && !searchSuggestionsElement.contains(e.target)) {
             searchSuggestionsElement.classList.remove('show');
         }
@@ -646,10 +647,10 @@ function initEventListeners() {
 
 function init() {
     backgroundElement.style.backgroundImage = `url('https://image.songzq.cn/wallpaper/001.jpg')`;
-    
+
     updateDateTime();
     setInterval(updateDateTime, 1000);
-    
+
     renderSearchEngines();
     renderCategoryTabs();
     renderWebsites();
