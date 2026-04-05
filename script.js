@@ -8,6 +8,8 @@ let activeCategory = '全部';
 let showSearchEngines = false;
 let searchQuery = '';
 let searchSuggestions = [];
+let searchHistory = [];
+let isDarkMode = false;
 
 const backgroundElement = document.getElementById('background');
 const currentTimeElement = document.getElementById('currentTime');
@@ -20,24 +22,111 @@ const searchButton = document.getElementById('searchButton');
 const searchEngineBtn = document.getElementById('searchEngineBtn');
 const categoryTabsElement = document.getElementById('categoryTabs');
 const websitesGridElement = document.getElementById('websitesGrid');
+const loadingElement = document.getElementById('loading');
+const themeToggleBtn = document.getElementById('themeToggle');
+const websiteSearchInput = document.getElementById('websiteSearch');
+const weatherElement = document.getElementById('weather');
+
+const STORAGE_KEYS = {
+    SEARCH_ENGINE: 'nav_search_engine',
+    DARK_MODE: 'nav_dark_mode',
+    SEARCH_HISTORY: 'nav_search_history',
+    CUSTOM_SITES: 'nav_custom_sites'
+};
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function loadUserPreferences() {
+    const savedEngine = localStorage.getItem(STORAGE_KEYS.SEARCH_ENGINE);
+    if (savedEngine) {
+        const engine = searchEngines.find(e => e.name === savedEngine);
+        if (engine) currentSearchEngine = engine;
+    }
+    
+    const savedDarkMode = localStorage.getItem(STORAGE_KEYS.DARK_MODE);
+    if (savedDarkMode === 'true') {
+        isDarkMode = true;
+        document.body.classList.add('dark-mode');
+    }
+    
+    const savedHistory = localStorage.getItem(STORAGE_KEYS.SEARCH_HISTORY);
+    if (savedHistory) {
+        searchHistory = JSON.parse(savedHistory);
+    }
+}
+
+function saveUserPreferences() {
+    if (currentSearchEngine) {
+        localStorage.setItem(STORAGE_KEYS.SEARCH_ENGINE, currentSearchEngine.name);
+    }
+    localStorage.setItem(STORAGE_KEYS.DARK_MODE, isDarkMode);
+    localStorage.setItem(STORAGE_KEYS.SEARCH_HISTORY, JSON.stringify(searchHistory));
+}
+
+function toggleDarkMode() {
+    isDarkMode = !isDarkMode;
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    localStorage.setItem(STORAGE_KEYS.DARK_MODE, isDarkMode);
+    updateThemeIcon();
+}
+
+function updateThemeIcon() {
+    if (themeToggleBtn) {
+        themeToggleBtn.textContent = isDarkMode ? '☀️' : '🌙';
+    }
+}
 
 async function loadData() {
     try {
+        showLoading(true);
         const [searchEnginesRes, websitesRes] = await Promise.all([
             fetch('./data/searchEngines.json'),
             fetch('./data/websitesData.json')
         ]);
+        
+        if (!searchEnginesRes.ok || !websitesRes.ok) {
+            throw new Error('数据加载失败');
+        }
         
         searchEngines = await searchEnginesRes.json();
         websitesData = await websitesRes.json();
         
         currentSearchEngine = searchEngines[1] || searchEngines[0];
         
+        loadUserPreferences();
+        
         return true;
     } catch (error) {
         console.error('加载数据失败:', error);
+        showError('数据加载失败，请刷新页面重试');
         return false;
+    } finally {
+        showLoading(false);
     }
+}
+
+function showLoading(show) {
+    if (loadingElement) {
+        loadingElement.style.display = show ? 'flex' : 'none';
+    }
+}
+
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-toast';
+    errorDiv.textContent = message;
+    document.body.appendChild(errorDiv);
+    setTimeout(() => errorDiv.remove(), 5000);
 }
 
 function updateDateTime() {
@@ -55,59 +144,69 @@ function updateDateTime() {
     currentDateElement.textContent = `${year}年${month}月${day}日 ${weekday}`;
 }
 
+async function loadWeather() {
+    if (!weatherElement) return;
+    
+    try {
+        const response = await fetch('https://api.vvhan.com/api/weather');
+        const data = await response.json();
+        if (data && data.info) {
+            weatherElement.textContent = data.info;
+        }
+    } catch (error) {
+        weatherElement.textContent = '';
+    }
+}
+
 function renderSearchEngines() {
     if (!currentSearchEngine) return;
     
     searchIconElement.src = currentSearchEngine.icon;
     searchEnginesDropdown.innerHTML = searchEngines.map(engine => `
         <div class="search-engine-option" data-name="${engine.name}">
-            <img src="${engine.icon}" alt="${engine.name}">
+            <img src="${engine.icon}" alt="${engine.name}" loading="lazy">
             <span>${engine.name}</span>
         </div>
     `).join('');
-
-    searchEnginesDropdown.querySelectorAll('.search-engine-option').forEach(option => {
-        option.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const name = option.dataset.name;
-            const engine = searchEngines.find(e => e.name === name);
-            if (engine) {
-                currentSearchEngine = engine;
-                searchIconElement.src = engine.icon;
-                searchEnginesDropdown.classList.remove('show');
-                showSearchEngines = false;
-            }
-        });
-    });
 }
 
 function renderCategoryTabs() {
     const categories = ['全部', ...categoriesData];
-    categoryTabsElement.innerHTML = categories.map(category => `
-        <button class="category-tab ${category === activeCategory ? 'active' : ''}" data-category="${category}">
+    categoryTabsElement.innerHTML = categories.map((category, index) => `
+        <button class="category-tab ${category === activeCategory ? 'active' : ''}" data-category="${category}" data-index="${index}">
             ${category}
         </button>
     `).join('');
-
-    categoryTabsElement.querySelectorAll('.category-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            activeCategory = tab.dataset.category;
-            renderCategoryTabs();
-            renderWebsites();
-        });
-    });
 }
 
-function renderWebsites() {
+function renderWebsites(filterText = '') {
     const defaultIcon = 'https://image.songzq.cn/other/02cb165d016fa0c02e01fe2321325df9.jpg';
-    const filteredWebsites = activeCategory === '全部'
+    
+    let filteredWebsites = activeCategory === '全部'
         ? websitesData
         : websitesData.filter(website => website.categoryName === activeCategory);
+    
+    if (filterText) {
+        const lowerFilter = filterText.toLowerCase();
+        filteredWebsites = filteredWebsites.filter(website => 
+            website.name.toLowerCase().includes(lowerFilter) ||
+            website.desc.toLowerCase().includes(lowerFilter)
+        );
+    }
+
+    if (filteredWebsites.length === 0) {
+        websitesGridElement.innerHTML = `
+            <div class="no-results">
+                <p>暂无匹配的网站</p>
+            </div>
+        `;
+        return;
+    }
 
     websitesGridElement.innerHTML = filteredWebsites.map(website => `
         <div class="website-item" data-url="${website.url}">
             <div class="website-icon">
-                <img src="${website.icon || defaultIcon}" alt="${website.name}" onerror="this.src='${defaultIcon}'">
+                <img src="${website.icon || defaultIcon}" alt="${website.name}" loading="lazy" onerror="this.src='${defaultIcon}'">
             </div>
             <div class="website-info">
                 <div class="website-name">${website.name}</div>
@@ -115,12 +214,6 @@ function renderWebsites() {
             </div>
         </div>
     `).join('');
-
-    websitesGridElement.querySelectorAll('.website-item').forEach(item => {
-        item.addEventListener('click', () => {
-            window.open(item.dataset.url, '_blank');
-        });
-    });
 }
 
 function performSearch() {
@@ -128,16 +221,44 @@ function performSearch() {
     
     const query = searchInput.value.trim();
     if (query) {
+        if (!searchHistory.includes(query)) {
+            searchHistory.unshift(query);
+            if (searchHistory.length > 10) searchHistory.pop();
+            saveUserPreferences();
+        }
+        
         window.open(currentSearchEngine.url + encodeURIComponent(query), '_blank');
         searchInput.value = '';
         searchSuggestionsElement.classList.remove('show');
     }
 }
 
+const debouncedHandleSearchInput = debounce(handleSearchInput, 300);
+
 function handleSearchInput() {
     const query = searchInput.value.trim();
     if (query) {
         getSearchSuggestions(query);
+    } else {
+        renderSearchHistory();
+    }
+}
+
+function renderSearchHistory() {
+    if (searchHistory.length > 0) {
+        searchSuggestionsElement.innerHTML = `
+            <div class="search-history-header">
+                <span>搜索历史</span>
+                <button class="clear-history" id="clearHistory">清除</button>
+            </div>
+            ${searchHistory.map(text => `
+                <div class="search-suggestion-item history-item" data-text="${text}">
+                    <span class="history-icon">🕐</span>
+                    <div class="suggestion-text">${text}</div>
+                </div>
+            `).join('')}
+        `;
+        searchSuggestionsElement.classList.add('show');
     } else {
         searchSuggestionsElement.classList.remove('show');
     }
@@ -149,18 +270,22 @@ function getSearchSuggestions(query) {
 
     window[callbackName] = function (data) {
         if (data && data[1] && Array.isArray(data[1])) {
-            searchSuggestions = data[1].map(text => ({ text, desc: '', icon: '' }));
+            searchSuggestions = data[1].slice(0, 8).map(text => ({ text, desc: '', icon: '' }));
             renderSearchSuggestions();
         }
         delete window[callbackName];
-        document.head.removeChild(script);
+        if (document.head.contains(script)) {
+            document.head.removeChild(script);
+        }
     };
 
     const script = document.createElement('script');
     script.src = apiUrl;
     script.onerror = function () {
         delete window[callbackName];
-        document.head.removeChild(script);
+        if (document.head.contains(script)) {
+            document.head.removeChild(script);
+        }
     };
     document.head.appendChild(script);
 }
@@ -173,16 +298,131 @@ function renderSearchSuggestions() {
             </div>
         `).join('');
         searchSuggestionsElement.classList.add('show');
-
-        searchSuggestionsElement.querySelectorAll('.search-suggestion-item').forEach(item => {
-            item.addEventListener('click', () => {
-                searchInput.value = item.dataset.text;
-                searchSuggestionsElement.classList.remove('show');
-                performSearch();
-            });
-        });
     } else {
         searchSuggestionsElement.classList.remove('show');
+    }
+}
+
+function setRandomBackground() {
+    const wallpapers = [
+        'https://image.songzq.cn/wallpaper/001.jpg',
+        'https://image.songzq.cn/wallpaper/002.jpg',
+        'https://image.songzq.cn/wallpaper/003.jpg',
+        'https://image.songzq.cn/wallpaper/004.jpg',
+        'https://image.songzq.cn/wallpaper/005.jpg',
+        'https://image.songzq.cn/wallpaper/006.jpg',
+        'https://image.songzq.cn/wallpaper/007.jpg',
+        'https://image.songzq.cn/wallpaper/008.jpg',
+        'https://image.songzq.cn/wallpaper/009.jpg',
+        'https://image.songzq.cn/wallpaper/010.jpg',
+        'https://image.songzq.cn/wallpaper/011.jpg',
+        'https://image.songzq.cn/wallpaper/012.jpg',
+        'https://image.songzq.cn/wallpaper/013.jpg'
+    ];
+    
+    const gradients = [
+        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+        'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+        'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+        'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+        'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+        'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)',
+        'linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)'
+    ];
+    
+    const randomIndex = Math.floor(Math.random() * wallpapers.length);
+    const selectedWallpaper = wallpapers[randomIndex];
+    
+    const img = new Image();
+    img.onload = function() {
+        backgroundElement.style.backgroundImage = `url('${selectedWallpaper}')`;
+    };
+    img.onerror = function() {
+        const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
+        backgroundElement.style.background = randomGradient;
+    };
+    img.src = selectedWallpaper;
+}
+
+function handleGlobalClick(e) {
+    const target = e.target;
+    
+    if (target.closest('.search-engine-option')) {
+        const option = target.closest('.search-engine-option');
+        const name = option.dataset.name;
+        const engine = searchEngines.find(eng => eng.name === name);
+        if (engine) {
+            currentSearchEngine = engine;
+            searchIconElement.src = engine.icon;
+            searchEnginesDropdown.classList.remove('show');
+            showSearchEngines = false;
+            saveUserPreferences();
+        }
+        return;
+    }
+    
+    if (target.closest('.category-tab')) {
+        const tab = target.closest('.category-tab');
+        activeCategory = tab.dataset.category;
+        renderCategoryTabs();
+        renderWebsites(websiteSearchInput?.value || '');
+        return;
+    }
+    
+    if (target.closest('.website-item')) {
+        const item = target.closest('.website-item');
+        window.open(item.dataset.url, '_blank');
+        return;
+    }
+    
+    if (target.closest('.search-suggestion-item')) {
+        const item = target.closest('.search-suggestion-item');
+        searchInput.value = item.dataset.text;
+        searchSuggestionsElement.classList.remove('show');
+        performSearch();
+        return;
+    }
+    
+    if (target.id === 'clearHistory') {
+        searchHistory = [];
+        saveUserPreferences();
+        searchSuggestionsElement.classList.remove('show');
+        return;
+    }
+    
+    if (!searchEngineBtn.contains(e.target)) {
+        searchEnginesDropdown.classList.remove('show');
+        showSearchEngines = false;
+    }
+
+    if (!searchInput.contains(e.target) && !searchSuggestionsElement.contains(e.target)) {
+        searchSuggestionsElement.classList.remove('show');
+    }
+}
+
+function handleKeyboardShortcuts(e) {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+    }
+    
+    if (e.key === 'Escape') {
+        searchInput.blur();
+        searchSuggestionsElement.classList.remove('show');
+        searchEnginesDropdown.classList.remove('show');
+        showSearchEngines = false;
+    }
+    
+    if (e.altKey && e.key >= '0' && e.key <= '9') {
+        e.preventDefault();
+        const index = parseInt(e.key);
+        const categories = ['全部', ...categoriesData];
+        if (index < categories.length) {
+            activeCategory = categories[index];
+            renderCategoryTabs();
+            renderWebsites(websiteSearchInput?.value || '');
+        }
     }
 }
 
@@ -201,28 +441,40 @@ function initEventListeners() {
         }
     });
 
-    searchInput.addEventListener('input', handleSearchInput);
-
-    document.addEventListener('click', (e) => {
-        if (!searchEngineBtn.contains(e.target)) {
-            searchEnginesDropdown.classList.remove('show');
-            showSearchEngines = false;
-        }
-
-        if (!searchInput.contains(e.target) && !searchSuggestionsElement.contains(e.target)) {
-            searchSuggestionsElement.classList.remove('show');
+    searchInput.addEventListener('input', debouncedHandleSearchInput);
+    
+    searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim() === '' && searchHistory.length > 0) {
+            renderSearchHistory();
         }
     });
+
+    document.addEventListener('click', handleGlobalClick);
+    
+    document.addEventListener('keydown', handleKeyboardShortcuts);
+    
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', toggleDarkMode);
+    }
+    
+    if (websiteSearchInput) {
+        websiteSearchInput.addEventListener('input', debounce((e) => {
+            renderWebsites(e.target.value);
+        }, 200));
+    }
 }
 
 async function init() {
-    backgroundElement.style.backgroundImage = `url('https://image.songzq.cn/wallpaper/001.jpg')`;
+    setRandomBackground();
 
     updateDateTime();
     setInterval(updateDateTime, 1000);
+    
+    loadWeather();
 
     const loaded = await loadData();
     if (loaded) {
+        updateThemeIcon();
         renderSearchEngines();
         renderCategoryTabs();
         renderWebsites();
