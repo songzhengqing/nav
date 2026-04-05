@@ -1,7 +1,7 @@
 let searchEngines = [];
 let websitesData = [];
 
-const categoriesData = ['工作', '影音', '学习&考试', 'AI', '境外网站', '软件', '其它'];
+const categoriesData = ['工作', '影音', '学习&考试', 'AI', '境外网站', '软件', '壁纸', '其它'];
 
 let currentSearchEngine = null;
 let activeCategory = '全部';

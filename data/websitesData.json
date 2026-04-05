@@ -98,6 +98,27 @@
         "categoryName": "影音"
     },
     {
+        "name": "优酷",
+        "url": "https://www.youku.com",
+        "icon": "https://image.songzq.cn/logo/youku.ico",
+        "desc": "优酷视频在线观看平台",
+        "categoryName": "影音"
+    },
+    {
+        "name": "芒果TV",
+        "url": "https://www.mgtv.com",
+        "icon": "https://image.songzq.cn/logo/mgtv.ico",
+        "desc": "芒果TV在线视频平台",
+        "categoryName": "影音"
+    },
+    {
+        "name": "快手",
+        "url": "https://www.kuaishou.com",
+        "icon": "https://image.songzq.cn/logo/kuaishou.ico",
+        "desc": "快手短视频平台",
+        "categoryName": "影音"
+    },
+    {
         "name": "国家开放大学",
         "url": "https://one.ouchn.cn/",
         "icon": "https://image.songzq.cn/logo/ouchn.ico",
@@ -425,5 +446,215 @@
         "icon": "https://image.songzq.cn/logo/aliyun.webp",
         "desc": "阿里云,AI,大模型,千问,云服务器,云数据库,域名注册备案",
         "categoryName": "其它"
+    },
+    {
+        "name": "彼岸图网",
+        "url": "https://pic.netbian.com/",
+        "icon": "https://image.songzq.cn/logo/netbian.ico",
+        "desc": "4K高清壁纸图片素材网站",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "一梦幽黎",
+        "url": "https://www.ymyouli.com/",
+        "icon": "https://image.songzq.cn/logo/ymyouli.ico",
+        "desc": "HIFI发烧音乐与8K动漫壁纸资源",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "新桌布网",
+        "url": "https://www.zhuobuwang.com/",
+        "icon": "https://image.songzq.cn/logo/zhuobuwang.ico",
+        "desc": "壁纸站点",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "UHD Wallpaper",
+        "url": "https://uhdpaper.com/",
+        "icon": "https://image.songzq.cn/logo/uhdpaper.ico",
+        "desc": "拥有4k 8k高清壁纸",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "乌云高清壁纸站",
+        "url": "https://www.wuyun.org/",
+        "icon": "https://image.songzq.cn/logo/wuyun.ico",
+        "desc": "分享来自世界各地高质量的壁纸",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "暖糖壁纸",
+        "url": "https://www.nuantang.cn/",
+        "icon": "https://image.songzq.cn/logo/nuantang.ico",
+        "desc": "暖糖壁纸是一个电脑桌面壁纸网站",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "美图131",
+        "url": "https://www.meitu131.com/",
+        "icon": "https://image.songzq.cn/logo/meitu131.ico",
+        "desc": "美图131旨在收集并分享各类精美壁纸",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "堆糖",
+        "url": "https://www.duitang.com/",
+        "icon": "https://image.songzq.cn/logo/duitang.ico",
+        "desc": "美图、壁纸分享社区",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "故宫壁纸",
+        "url": "https://www.dpm.org.cn/collection/wallpaper.html",
+        "icon": "https://image.songzq.cn/logo/gugong.ico",
+        "desc": "故宫博物院官方出品的故宫壁纸",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "宝藏图库",
+        "url": "https://www.baoztu.com/",
+        "icon": "https://image.songzq.cn/logo/baoztu.ico",
+        "desc": "提供海量高清壁纸资源，动漫、风景等",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "48G小偶像",
+        "url": "https://www.48g.com/",
+        "icon": "https://image.songzq.cn/logo/48g.ico",
+        "desc": "SNH48Group成员专属高质量壁纸",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "Wallpaper Abyss",
+        "url": "https://wall.alphacoders.com/",
+        "icon": "https://image.songzq.cn/logo/wallpaperabyss.ico",
+        "desc": "一家有4K资源壁纸社区",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "在线电脑壁纸",
+        "url": "https://www.dnbcw.com/",
+        "icon": "https://image.songzq.cn/logo/dnbcw.ico",
+        "desc": "高清电脑壁纸下载",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "拾光壁纸",
+        "url": "https://www.shiguangwp.com/",
+        "icon": "https://image.songzq.cn/logo/shiguangwp.ico",
+        "desc": "干净、舒适、流畅的桌面壁纸",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "4K高清壁纸之家",
+        "url": "https://www.4kzhijia.com/",
+        "icon": "https://image.songzq.cn/logo/4kzhijia.ico",
+        "desc": "4K高清壁纸下载网站",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "每日美图",
+        "url": "https://www.meirimeitu.com/",
+        "icon": "https://image.songzq.cn/logo/meirimeitu.ico",
+        "desc": "每日美图提供精选的高清壁纸",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "WallHere",
+        "url": "https://www.wallhere.com/",
+        "icon": "https://image.songzq.cn/logo/wallhere.ico",
+        "desc": "一个自称是世界上最著名的壁纸网站",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "Wallpaperscraft",
+        "url": "https://wallpaperscraft.com/",
+        "icon": "https://image.songzq.cn/logo/wallpaperscraft.ico",
+        "desc": "Wallpaperscraft是一个免费壁纸网站",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "Wallpaper Cave",
+        "url": "https://wallpapercave.com/",
+        "icon": "https://image.songzq.cn/logo/wallpapercave.ico",
+        "desc": "风格偏清新明丽，主页获奖壁纸多",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "Anime Picture",
+        "url": "https://anime-pictures.net/",
+        "icon": "https://image.songzq.cn/logo/animepicture.ico",
+        "desc": "专门的动漫图片和壁纸分享网站",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "CGWallpapers",
+        "url": "https://www.cgwallpapers.com/",
+        "icon": "https://image.songzq.cn/logo/cgwallpapers.ico",
+        "desc": "CGWallpapers是一个提供CG壁纸的网站",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "Wallpapers",
+        "url": "https://wallpapers.com/",
+        "icon": "https://image.songzq.cn/logo/wallpapers.ico",
+        "desc": "国外知名的壁纸网站，图片质量高",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "必应壁纸",
+        "url": "https://bingwallpaper.com/",
+        "icon": "https://image.songzq.cn/logo/bingwallpaper.ico",
+        "desc": "必应每日一图，必应壁纸下载",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "3G壁纸",
+        "url": "https://www.3gbizhi.com/",
+        "icon": "https://image.songzq.cn/logo/3gbizhi.ico",
+        "desc": "3G壁纸网站",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "壁纸湖网",
+        "url": "https://www.bizhihu.com/",
+        "icon": "https://image.songzq.cn/logo/bizhihu.ico",
+        "desc": "壁纸湖是一个纯净无广告的壁纸网站",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "GameWallpapers",
+        "url": "https://www.gamewallpapers.com/",
+        "icon": "https://image.songzq.cn/logo/gamewallpapers.ico",
+        "desc": "游戏主题壁纸网站",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "Unsplash",
+        "url": "https://unsplash.com/",
+        "icon": "https://image.songzq.cn/logo/unsplash.ico",
+        "desc": "以摄影作品为主，图片分辨率高",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "必应4K无损壁纸",
+        "url": "https://bing4kwallpaper.com/",
+        "icon": "https://image.songzq.cn/logo/bing4k.ico",
+        "desc": "可下载4k及更大分辨率的必应壁纸",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "极简壁纸",
+        "url": "https://www.jijianbizhi.com/",
+        "icon": "https://image.songzq.cn/logo/jijianbizhi.ico",
+        "desc": "国人维护的壁纸网站，图片质量高",
+        "categoryName": "壁纸"
+    },
+    {
+        "name": "美图集",
+        "url": "https://www.meituj.com/",
+        "icon": "https://image.songzq.cn/logo/meituj.ico",
+        "desc": "海量高清图片和壁纸资源",
+        "categoryName": "壁纸"
     }
 ]
