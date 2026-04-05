@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>正清 の 导航页</title>
     <link rel="icon" href="https://image.songzq.cn/avatar_yuan.jpg" type="image/jpeg">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a90e2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="正清导航">
+    <link rel="apple-touch-icon" href="https://image.songzq.cn/avatar_yuan.jpg">
+    
+    <link rel="preconnect" href="https://image.songzq.cn">
+    <link rel="preconnect" href="https://suggestion.baidu.com">
+    <link rel="preconnect" href="https://api.vvhan.com">
+    <link rel="dns-prefetch" href="https://image.songzq.cn">
+    <link rel="dns-prefetch" href="https://suggestion.baidu.com">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,7 +36,12 @@
                         <div class="date" id="currentDate"></div>
                         <div class="weather" id="weather"></div>
                     </div>
-                    <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
+                    <div class="header-actions">
+                        <button class="action-btn" id="changeWallpaper" title="切换壁纸">🖼️</button>
+                        <button class="action-btn" id="addWebsite" title="添加网站">➕</button>
+                        <button class="action-btn" id="settingsBtn" title="设置">⚙️</button>
+                        <button class="action-btn" id="themeToggle" title="切换主题">🌙</button>
+                    </div>
                 </div>
                 
                 <div class="search-container">
@@ -48,13 +66,70 @@
                 <div class="websites-container">
                     <div class="websites-grid" id="websitesGrid"></div>
                 </div>
-                
-                <!-- <div class="footer">
-                    <p>快捷键: / 聚焦搜索 | Alt+0-8 切换分类 | Esc 关闭弹窗</p>
-                </div> -->
             </div>
         </div>
     </div>
+    
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>设置</h3>
+                <button class="modal-close" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h4>数据管理</h4>
+                    <div class="settings-row">
+                        <button class="settings-btn" id="exportData">导出配置</button>
+                        <button class="settings-btn" id="importData">导入配置</button>
+                        <input type="file" id="importFile" accept=".json" style="display:none">
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h4>清除数据</h4>
+                    <div class="settings-row">
+                        <button class="settings-btn danger" id="clearAllData">清除所有数据</button>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h4>统计信息</h4>
+                    <div id="statsInfo" class="stats-info"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="addWebsiteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>添加网站</h3>
+                <button class="modal-close" id="closeAddWebsite">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>网站名称</label>
+                    <input type="text" id="newSiteName" placeholder="请输入网站名称">
+                </div>
+                <div class="form-group">
+                    <label>网站地址</label>
+                    <input type="url" id="newSiteUrl" placeholder="https://example.com">
+                </div>
+                <div class="form-group">
+                    <label>网站描述</label>
+                    <input type="text" id="newSiteDesc" placeholder="简短描述">
+                </div>
+                <div class="form-group">
+                    <label>分类</label>
+                    <select id="newSiteCategory"></select>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-primary" id="saveNewSite">保存</button>
+                    <button class="btn-secondary" id="cancelNewSite">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>

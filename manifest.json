@@ -1,0 +1,26 @@
+{
+    "name": "正清导航页",
+    "short_name": "导航页",
+    "description": "个人网址导航页面",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#1a1a2e",
+    "theme_color": "#4a90e2",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "https://image.songzq.cn/avatar_yuan.jpg",
+            "sizes": "192x192",
+            "type": "image/jpeg",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "https://image.songzq.cn/avatar_yuan.jpg",
+            "sizes": "512x512",
+            "type": "image/jpeg",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["utilities", "productivity"],
+    "lang": "zh-CN"
+}

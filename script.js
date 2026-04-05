@@ -1,15 +1,18 @@
 let searchEngines = [];
 let websitesData = [];
-
-const categoriesData = ['工作', '影音', '学习&考试', 'AI', '境外网站', '软件', '壁纸', '其它'];
+let wallpapersData = [];
+let categoriesData = ['工作', '影音', '学习&考试', 'AI', '境外网站', '软件', '壁纸', '其它'];
 
 let currentSearchEngine = null;
 let activeCategory = '全部';
 let showSearchEngines = false;
-let searchQuery = '';
 let searchSuggestions = [];
 let searchHistory = [];
 let isDarkMode = false;
+let pinnedSites = [];
+let customSites = [];
+let visitStats = {};
+let currentWallpaperIndex = 0;
 
 const backgroundElement = document.getElementById('background');
 const currentTimeElement = document.getElementById('currentTime');
@@ -26,12 +29,20 @@ const loadingElement = document.getElementById('loading');
 const themeToggleBtn = document.getElementById('themeToggle');
 const websiteSearchInput = document.getElementById('websiteSearch');
 const weatherElement = document.getElementById('weather');
+const settingsModal = document.getElementById('settingsModal');
+const addWebsiteModal = document.getElementById('addWebsiteModal');
+const changeWallpaperBtn = document.getElementById('changeWallpaper');
+const addWebsiteBtn = document.getElementById('addWebsite');
+const settingsBtn = document.getElementById('settingsBtn');
 
 const STORAGE_KEYS = {
     SEARCH_ENGINE: 'nav_search_engine',
     DARK_MODE: 'nav_dark_mode',
     SEARCH_HISTORY: 'nav_search_history',
-    CUSTOM_SITES: 'nav_custom_sites'
+    PINNED_SITES: 'nav_pinned_sites',
+    CUSTOM_SITES: 'nav_custom_sites',
+    VISIT_STATS: 'nav_visit_stats',
+    WEATHER_CACHE: 'nav_weather_cache'
 };
 
 function debounce(func, wait) {
@@ -63,6 +74,21 @@ function loadUserPreferences() {
     if (savedHistory) {
         searchHistory = JSON.parse(savedHistory);
     }
+    
+    const savedPinned = localStorage.getItem(STORAGE_KEYS.PINNED_SITES);
+    if (savedPinned) {
+        pinnedSites = JSON.parse(savedPinned);
+    }
+    
+    const savedCustom = localStorage.getItem(STORAGE_KEYS.CUSTOM_SITES);
+    if (savedCustom) {
+        customSites = JSON.parse(savedCustom);
+    }
+    
+    const savedStats = localStorage.getItem(STORAGE_KEYS.VISIT_STATS);
+    if (savedStats) {
+        visitStats = JSON.parse(savedStats);
+    }
 }
 
 function saveUserPreferences() {
@@ -71,6 +97,9 @@ function saveUserPreferences() {
     }
     localStorage.setItem(STORAGE_KEYS.DARK_MODE, isDarkMode);
     localStorage.setItem(STORAGE_KEYS.SEARCH_HISTORY, JSON.stringify(searchHistory));
+    localStorage.setItem(STORAGE_KEYS.PINNED_SITES, JSON.stringify(pinnedSites));
+    localStorage.setItem(STORAGE_KEYS.CUSTOM_SITES, JSON.stringify(customSites));
+    localStorage.setItem(STORAGE_KEYS.VISIT_STATS, JSON.stringify(visitStats));
 }
 
 function toggleDarkMode() {
@@ -89,9 +118,10 @@ function updateThemeIcon() {
 async function loadData() {
     try {
         showLoading(true);
-        const [searchEnginesRes, websitesRes] = await Promise.all([
+        const [searchEnginesRes, websitesRes, wallpapersRes] = await Promise.all([
             fetch('./data/searchEngines.json'),
-            fetch('./data/websitesData.json')
+            fetch('./data/websitesData.json'),
+            fetch('./data/wallpapers.json')
         ]);
         
         if (!searchEnginesRes.ok || !websitesRes.ok) {
@@ -100,6 +130,10 @@ async function loadData() {
         
         searchEngines = await searchEnginesRes.json();
         websitesData = await websitesRes.json();
+        
+        if (wallpapersRes.ok) {
+            wallpapersData = await wallpapersRes.json();
+        }
         
         currentSearchEngine = searchEngines[1] || searchEngines[0];
         
@@ -121,12 +155,12 @@ function showLoading(show) {
     }
 }
 
-function showError(message) {
+function showError(message, isSuccess = false) {
     const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-toast';
+    errorDiv.className = 'error-toast' + (isSuccess ? ' success-toast' : '');
     errorDiv.textContent = message;
     document.body.appendChild(errorDiv);
-    setTimeout(() => errorDiv.remove(), 5000);
+    setTimeout(() => errorDiv.remove(), 3000);
 }
 
 function updateDateTime() {
@@ -147,11 +181,25 @@ function updateDateTime() {
 async function loadWeather() {
     if (!weatherElement) return;
     
+    const cached = localStorage.getItem(STORAGE_KEYS.WEATHER_CACHE);
+    if (cached) {
+        const { data, timestamp } = JSON.parse(cached);
+        const hour = 3600000;
+        if (Date.now() - timestamp < hour) {
+            weatherElement.textContent = data;
+            return;
+        }
+    }
+    
     try {
         const response = await fetch('https://api.vvhan.com/api/weather');
         const data = await response.json();
         if (data && data.info) {
             weatherElement.textContent = data.info;
+            localStorage.setItem(STORAGE_KEYS.WEATHER_CACHE, JSON.stringify({
+                data: data.info,
+                timestamp: Date.now()
+            }));
         }
     } catch (error) {
         weatherElement.textContent = '';
@@ -182,9 +230,11 @@ function renderCategoryTabs() {
 function renderWebsites(filterText = '') {
     const defaultIcon = 'https://image.songzq.cn/other/02cb165d016fa0c02e01fe2321325df9.jpg';
     
+    let allSites = [...websitesData, ...customSites];
+    
     let filteredWebsites = activeCategory === '全部'
-        ? websitesData
-        : websitesData.filter(website => website.categoryName === activeCategory);
+        ? allSites
+        : allSites.filter(website => website.categoryName === activeCategory);
     
     if (filterText) {
         const lowerFilter = filterText.toLowerCase();
@@ -193,6 +243,17 @@ function renderWebsites(filterText = '') {
             website.desc.toLowerCase().includes(lowerFilter)
         );
     }
+
+    filteredWebsites.sort((a, b) => {
+        const aPinned = pinnedSites.includes(a.url);
+        const bPinned = pinnedSites.includes(b.url);
+        if (aPinned && !bPinned) return -1;
+        if (!aPinned && bPinned) return 1;
+        
+        const aVisits = visitStats[a.url] || 0;
+        const bVisits = visitStats[b.url] || 0;
+        return bVisits - aVisits;
+    });
 
     if (filteredWebsites.length === 0) {
         websitesGridElement.innerHTML = `
@@ -203,17 +264,23 @@ function renderWebsites(filterText = '') {
         return;
     }
 
-    websitesGridElement.innerHTML = filteredWebsites.map(website => `
-        <div class="website-item" data-url="${website.url}">
-            <div class="website-icon">
-                <img src="${website.icon || defaultIcon}" alt="${website.name}" loading="lazy" onerror="this.src='${defaultIcon}'">
+    websitesGridElement.innerHTML = filteredWebsites.map(website => {
+        const isPinned = pinnedSites.includes(website.url);
+        const visits = visitStats[website.url] || 0;
+        return `
+            <div class="website-item ${isPinned ? 'pinned' : ''}" data-url="${website.url}">
+                <button class="pin-btn" data-url="${website.url}" title="${isPinned ? '取消置顶' : '置顶'}">${isPinned ? '📌' : '📍'}</button>
+                <div class="website-icon">
+                    <img src="${website.icon || defaultIcon}" alt="${website.name}" loading="lazy" onerror="this.src='${defaultIcon}'">
+                </div>
+                <div class="website-info">
+                    <div class="website-name">${website.name}</div>
+                    <div class="website-desc">${website.desc}</div>
+                    ${visits > 0 ? `<div class="website-stats">访问 ${visits} 次</div>` : ''}
+                </div>
             </div>
-            <div class="website-info">
-                <div class="website-name">${website.name}</div>
-                <div class="website-desc">${website.desc}</div>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 function performSearch() {
@@ -311,45 +378,195 @@ function renderSearchSuggestions() {
 }
 
 function setRandomBackground() {
-    const wallpapers = [
-        'https://image.songzq.cn/wallpaper/001.jpg',
-        'https://image.songzq.cn/wallpaper/002.jpg',
-        'https://image.songzq.cn/wallpaper/003.jpg',
-        'https://image.songzq.cn/wallpaper/004.jpg',
-        'https://image.songzq.cn/wallpaper/005.jpg',
-        'https://image.songzq.cn/wallpaper/006.jpg',
-        'https://image.songzq.cn/wallpaper/007.jpg',
-        'https://image.songzq.cn/wallpaper/008.jpg',
-        'https://image.songzq.cn/wallpaper/009.jpg',
-        'https://image.songzq.cn/wallpaper/010.jpg',
-        'https://image.songzq.cn/wallpaper/011.jpg',
-        'https://image.songzq.cn/wallpaper/012.jpg',
-        'https://image.songzq.cn/wallpaper/013.jpg'
-    ];
+    if (!wallpapersData.wallpapers || wallpapersData.wallpapers.length === 0) {
+        setGradientBackground();
+        return;
+    }
     
-    const gradients = [
-        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-        'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-        'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-        'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-        'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)',
-        'linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)'
-    ];
-    
-    const randomIndex = Math.floor(Math.random() * wallpapers.length);
-    const selectedWallpaper = wallpapers[randomIndex];
+    currentWallpaperIndex = Math.floor(Math.random() * wallpapersData.wallpapers.length);
+    loadWallpaper(currentWallpaperIndex);
+}
+
+function loadWallpaper(index) {
+    const selectedWallpaper = wallpapersData.wallpapers[index];
     
     const img = new Image();
     img.onload = function() {
         backgroundElement.style.backgroundImage = `url('${selectedWallpaper}')`;
     };
     img.onerror = function() {
-        const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
-        backgroundElement.style.background = randomGradient;
+        setGradientBackground();
     };
     img.src = selectedWallpaper;
+}
+
+function setGradientBackground() {
+    const gradients = wallpapersData.gradients || [
+        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+        'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+    ];
+    const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
+    backgroundElement.style.background = randomGradient;
+}
+
+function changeWallpaper() {
+    if (!wallpapersData.wallpapers || wallpapersData.wallpapers.length === 0) {
+        setGradientBackground();
+        return;
+    }
+    
+    currentWallpaperIndex = (currentWallpaperIndex + 1) % wallpapersData.wallpapers.length;
+    loadWallpaper(currentWallpaperIndex);
+}
+
+function togglePin(url) {
+    const index = pinnedSites.indexOf(url);
+    if (index > -1) {
+        pinnedSites.splice(index, 1);
+    } else {
+        pinnedSites.push(url);
+    }
+    saveUserPreferences();
+    renderWebsites(websiteSearchInput?.value || '');
+}
+
+function recordVisit(url) {
+    visitStats[url] = (visitStats[url] || 0) + 1;
+    saveUserPreferences();
+}
+
+function openSettings() {
+    settingsModal.classList.add('show');
+    updateStatsInfo();
+}
+
+function closeSettings() {
+    settingsModal.classList.remove('show');
+}
+
+function updateStatsInfo() {
+    const statsInfo = document.getElementById('statsInfo');
+    if (!statsInfo) return;
+    
+    const totalVisits = Object.values(visitStats).reduce((a, b) => a + b, 0);
+    const topSites = Object.entries(visitStats)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+    
+    statsInfo.innerHTML = `
+        <p>总访问次数: ${totalVisits}</p>
+        <p>置顶网站: ${pinnedSites.length} 个</p>
+        <p>自定义网站: ${customSites.length} 个</p>
+        ${topSites.length > 0 ? `
+            <p style="margin-top: 10px;">最常访问:</p>
+            ${topSites.map(([url, count]) => {
+                const site = [...websitesData, ...customSites].find(s => s.url === url);
+                return `<p>• ${site ? site.name : url}: ${count} 次</p>`;
+            }).join('')}
+        ` : ''}
+    `;
+}
+
+function exportData() {
+    const data = {
+        searchEngine: currentSearchEngine?.name,
+        darkMode: isDarkMode,
+        searchHistory: searchHistory,
+        pinnedSites: pinnedSites,
+        customSites: customSites,
+        visitStats: visitStats,
+        exportTime: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nav-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showError('配置已导出', true);
+}
+
+function importData(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            
+            if (data.searchEngine) {
+                const engine = searchEngines.find(e => e.name === data.searchEngine);
+                if (engine) currentSearchEngine = engine;
+            }
+            if (data.darkMode !== undefined) {
+                isDarkMode = data.darkMode;
+                document.body.classList.toggle('dark-mode', isDarkMode);
+            }
+            if (data.searchHistory) searchHistory = data.searchHistory;
+            if (data.pinnedSites) pinnedSites = data.pinnedSites;
+            if (data.customSites) customSites = data.customSites;
+            if (data.visitStats) visitStats = data.visitStats;
+            
+            saveUserPreferences();
+            updateThemeIcon();
+            renderWebsites();
+            showError('配置已导入', true);
+        } catch (error) {
+            showError('导入失败，文件格式错误');
+        }
+    };
+    reader.readAsText(file);
+}
+
+function clearAllData() {
+    if (confirm('确定要清除所有数据吗？此操作不可恢复。')) {
+        localStorage.clear();
+        location.reload();
+    }
+}
+
+function openAddWebsite() {
+    const categorySelect = document.getElementById('newSiteCategory');
+    categorySelect.innerHTML = categoriesData.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+    addWebsiteModal.classList.add('show');
+}
+
+function closeAddWebsite() {
+    addWebsiteModal.classList.remove('show');
+    document.getElementById('newSiteName').value = '';
+    document.getElementById('newSiteUrl').value = '';
+    document.getElementById('newSiteDesc').value = '';
+}
+
+function saveNewSite() {
+    const name = document.getElementById('newSiteName').value.trim();
+    const url = document.getElementById('newSiteUrl').value.trim();
+    const desc = document.getElementById('newSiteDesc').value.trim();
+    const category = document.getElementById('newSiteCategory').value;
+    
+    if (!name || !url) {
+        showError('请填写网站名称和地址');
+        return;
+    }
+    
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        showError('网站地址必须以 http:// 或 https:// 开头');
+        return;
+    }
+    
+    customSites.push({
+        name,
+        url,
+        icon: '',
+        desc: desc || name,
+        categoryName: category
+    });
+    
+    saveUserPreferences();
+    renderWebsites();
+    closeAddWebsite();
+    showError('网站已添加', true);
 }
 
 function handleKeyboardShortcuts(e) {
@@ -363,6 +580,8 @@ function handleKeyboardShortcuts(e) {
         searchSuggestionsElement.classList.remove('show');
         searchEnginesDropdown.classList.remove('show');
         showSearchEngines = false;
+        settingsModal.classList.remove('show');
+        addWebsiteModal.classList.remove('show');
     }
     
     if (e.altKey && e.key >= '0' && e.key <= '9') {
@@ -464,10 +683,52 @@ function initEventListeners() {
     });
     
     websitesGridElement.addEventListener('click', (e) => {
+        const pinBtn = e.target.closest('.pin-btn');
+        if (pinBtn) {
+            e.stopPropagation();
+            togglePin(pinBtn.dataset.url);
+            return;
+        }
+        
         const item = e.target.closest('.website-item');
         if (item) {
+            recordVisit(item.dataset.url);
             window.open(item.dataset.url, '_blank');
         }
+    });
+    
+    if (changeWallpaperBtn) {
+        changeWallpaperBtn.addEventListener('click', changeWallpaper);
+    }
+    
+    if (addWebsiteBtn) {
+        addWebsiteBtn.addEventListener('click', openAddWebsite);
+    }
+    
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', openSettings);
+    }
+    
+    document.getElementById('closeSettings')?.addEventListener('click', closeSettings);
+    document.getElementById('closeAddWebsite')?.addEventListener('click', closeAddWebsite);
+    document.getElementById('exportData')?.addEventListener('click', exportData);
+    document.getElementById('importData')?.addEventListener('click', () => {
+        document.getElementById('importFile').click();
+    });
+    document.getElementById('importFile')?.addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+            importData(e.target.files[0]);
+        }
+    });
+    document.getElementById('clearAllData')?.addEventListener('click', clearAllData);
+    document.getElementById('saveNewSite')?.addEventListener('click', saveNewSite);
+    document.getElementById('cancelNewSite')?.addEventListener('click', closeAddWebsite);
+    
+    settingsModal?.addEventListener('click', (e) => {
+        if (e.target === settingsModal) closeSettings();
+    });
+    addWebsiteModal?.addEventListener('click', (e) => {
+        if (e.target === addWebsiteModal) closeAddWebsite();
     });
 }
 
@@ -486,6 +747,14 @@ async function init() {
         renderCategoryTabs();
         renderWebsites();
         initEventListeners();
+        
+        if ('serviceWorker' in navigator) {
+            try {
+                await navigator.serviceWorker.register('./sw.js');
+            } catch (error) {
+                console.log('Service Worker registration failed:', error);
+            }
+        }
     }
 }
 
