@@ -266,28 +266,35 @@ function renderSearchHistory() {
 
 function getSearchSuggestions(query) {
     const callbackName = 'handleSuggestions_' + Date.now();
-    const apiUrl = `https://api.bing.com/osjson.aspx?query=${encodeURIComponent(query)}&jsonp=${callbackName}`;
+    const apiUrl = `https://suggestion.baidu.com/su?wd=${encodeURIComponent(query)}&cb=${callbackName}`;
 
     window[callbackName] = function (data) {
-        if (data && data[1] && Array.isArray(data[1])) {
-            searchSuggestions = data[1].slice(0, 8).map(text => ({ text, desc: '', icon: '' }));
+        if (data && data.s && Array.isArray(data.s)) {
+            searchSuggestions = data.s.slice(0, 8).map(text => ({ text, desc: '', icon: '' }));
             renderSearchSuggestions();
         }
         delete window[callbackName];
-        if (document.head.contains(script)) {
-            document.head.removeChild(script);
+        const scriptEl = document.getElementById('suggestion_script');
+        if (scriptEl && scriptEl.parentNode) {
+            scriptEl.parentNode.removeChild(scriptEl);
         }
     };
 
-    const script = document.createElement('script');
+    let script = document.getElementById('suggestion_script');
+    if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+    }
+    
+    script = document.createElement('script');
+    script.id = 'suggestion_script';
     script.src = apiUrl;
     script.onerror = function () {
         delete window[callbackName];
-        if (document.head.contains(script)) {
-            document.head.removeChild(script);
+        if (script.parentNode) {
+            script.parentNode.removeChild(script);
         }
     };
-    document.head.appendChild(script);
+    document.body.appendChild(script);
 }
 
 function renderSearchSuggestions() {
@@ -345,62 +352,6 @@ function setRandomBackground() {
     img.src = selectedWallpaper;
 }
 
-function handleGlobalClick(e) {
-    const target = e.target;
-    
-    if (target.closest('.search-engine-option')) {
-        const option = target.closest('.search-engine-option');
-        const name = option.dataset.name;
-        const engine = searchEngines.find(eng => eng.name === name);
-        if (engine) {
-            currentSearchEngine = engine;
-            searchIconElement.src = engine.icon;
-            searchEnginesDropdown.classList.remove('show');
-            showSearchEngines = false;
-            saveUserPreferences();
-        }
-        return;
-    }
-    
-    if (target.closest('.category-tab')) {
-        const tab = target.closest('.category-tab');
-        activeCategory = tab.dataset.category;
-        renderCategoryTabs();
-        renderWebsites(websiteSearchInput?.value || '');
-        return;
-    }
-    
-    if (target.closest('.website-item')) {
-        const item = target.closest('.website-item');
-        window.open(item.dataset.url, '_blank');
-        return;
-    }
-    
-    if (target.closest('.search-suggestion-item')) {
-        const item = target.closest('.search-suggestion-item');
-        searchInput.value = item.dataset.text;
-        searchSuggestionsElement.classList.remove('show');
-        performSearch();
-        return;
-    }
-    
-    if (target.id === 'clearHistory') {
-        searchHistory = [];
-        saveUserPreferences();
-        searchSuggestionsElement.classList.remove('show');
-        return;
-    }
-    
-    if (!searchEngineBtn.contains(e.target)) {
-        searchEnginesDropdown.classList.remove('show');
-        showSearchEngines = false;
-    }
-
-    if (!searchInput.contains(e.target) && !searchSuggestionsElement.contains(e.target)) {
-        searchSuggestionsElement.classList.remove('show');
-    }
-}
-
 function handleKeyboardShortcuts(e) {
     if (e.key === '/' && document.activeElement !== searchInput) {
         e.preventDefault();
@@ -433,6 +384,22 @@ function initEventListeners() {
         searchEnginesDropdown.classList.toggle('show', showSearchEngines);
     });
 
+    searchEnginesDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const option = e.target.closest('.search-engine-option');
+        if (option) {
+            const name = option.dataset.name;
+            const engine = searchEngines.find(eng => eng.name === name);
+            if (engine) {
+                currentSearchEngine = engine;
+                searchIconElement.src = engine.icon;
+                searchEnginesDropdown.classList.remove('show');
+                showSearchEngines = false;
+                saveUserPreferences();
+            }
+        }
+    });
+
     searchButton.addEventListener('click', performSearch);
 
     searchInput.addEventListener('keypress', (e) => {
@@ -449,7 +416,16 @@ function initEventListeners() {
         }
     });
 
-    document.addEventListener('click', handleGlobalClick);
+    document.addEventListener('click', (e) => {
+        if (!searchEngineBtn.contains(e.target)) {
+            searchEnginesDropdown.classList.remove('show');
+            showSearchEngines = false;
+        }
+
+        if (!searchInput.contains(e.target) && !searchSuggestionsElement.contains(e.target)) {
+            searchSuggestionsElement.classList.remove('show');
+        }
+    });
     
     document.addEventListener('keydown', handleKeyboardShortcuts);
     
@@ -462,6 +438,37 @@ function initEventListeners() {
             renderWebsites(e.target.value);
         }, 200));
     }
+    
+    searchSuggestionsElement.addEventListener('click', (e) => {
+        const item = e.target.closest('.search-suggestion-item');
+        if (item) {
+            searchInput.value = item.dataset.text;
+            searchSuggestionsElement.classList.remove('show');
+            performSearch();
+        }
+        
+        if (e.target.id === 'clearHistory') {
+            searchHistory = [];
+            saveUserPreferences();
+            searchSuggestionsElement.classList.remove('show');
+        }
+    });
+    
+    categoryTabsElement.addEventListener('click', (e) => {
+        const tab = e.target.closest('.category-tab');
+        if (tab) {
+            activeCategory = tab.dataset.category;
+            renderCategoryTabs();
+            renderWebsites(websiteSearchInput?.value || '');
+        }
+    });
+    
+    websitesGridElement.addEventListener('click', (e) => {
+        const item = e.target.closest('.website-item');
+        if (item) {
+            window.open(item.dataset.url, '_blank');
+        }
+    });
 }
 
 async function init() {
