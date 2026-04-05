@@ -1,18 +1,40 @@
-let searchEngines = [];
-let websitesData = [];
-let wallpapersData = [];
-let categoriesData = ['工作', '影音', '学习&考试', 'AI', '境外网站', '软件', '壁纸', '其它'];
+/**
+ * 正清の导航页 - 主脚本文件
+ * 
+ * 功能包括：
+ * - 多引擎搜索
+ * - 网站分类导航
+ * - 暗黑模式
+ * - 网站置顶
+ * - 访问统计
+ * - 数据导入导出
+ * - PWA支持
+ */
 
-let currentSearchEngine = null;
-let activeCategory = '全部';
-let showSearchEngines = false;
-let searchSuggestions = [];
-let searchHistory = [];
-let isDarkMode = false;
-let pinnedSites = [];
-let customSites = [];
-let visitStats = {};
-let currentWallpaperIndex = 0;
+// ==================== 数据变量 ====================
+
+// 从JSON文件加载的数据
+let searchEngines = [];      // 搜索引擎列表
+let websitesData = [];       // 网站数据列表
+let wallpapersData = [];     // 壁纸配置数据
+
+// 网站分类列表
+const categoriesData = ['工作', '影音', '学习&考试', 'AI', '境外网站', '软件', '壁纸', '其它'];
+
+// ==================== 状态变量 ====================
+
+let currentSearchEngine = null;    // 当前选中的搜索引擎
+let activeCategory = '全部';        // 当前选中的分类
+let showSearchEngines = false;      // 搜索引擎下拉菜单是否显示
+let searchSuggestions = [];         // 搜索建议列表
+let searchHistory = [];             // 搜索历史记录
+let isDarkMode = false;             // 是否为暗黑模式
+let pinnedSites = [];               // 置顶网站URL列表
+let customSites = [];               // 用户自定义网站列表
+let visitStats = {};                // 网站访问统计 { url: count }
+let currentWallpaperIndex = 0;      // 当前壁纸索引
+
+// ==================== DOM 元素引用 ====================
 
 const backgroundElement = document.getElementById('background');
 const currentTimeElement = document.getElementById('currentTime');
@@ -35,16 +57,27 @@ const changeWallpaperBtn = document.getElementById('changeWallpaper');
 const addWebsiteBtn = document.getElementById('addWebsite');
 const settingsBtn = document.getElementById('settingsBtn');
 
+// ==================== 常量定义 ====================
+
+// localStorage 存储键名
 const STORAGE_KEYS = {
-    SEARCH_ENGINE: 'nav_search_engine',
-    DARK_MODE: 'nav_dark_mode',
-    SEARCH_HISTORY: 'nav_search_history',
-    PINNED_SITES: 'nav_pinned_sites',
-    CUSTOM_SITES: 'nav_custom_sites',
-    VISIT_STATS: 'nav_visit_stats',
-    WEATHER_CACHE: 'nav_weather_cache'
+    SEARCH_ENGINE: 'nav_search_engine',     // 搜索引擎偏好
+    DARK_MODE: 'nav_dark_mode',             // 暗黑模式状态
+    SEARCH_HISTORY: 'nav_search_history',   // 搜索历史
+    PINNED_SITES: 'nav_pinned_sites',       // 置顶网站
+    CUSTOM_SITES: 'nav_custom_sites',       // 自定义网站
+    VISIT_STATS: 'nav_visit_stats',         // 访问统计
+    WEATHER_CACHE: 'nav_weather_cache'      // 天气缓存
 };
 
+// ==================== 工具函数 ====================
+
+/**
+ * 防抖函数
+ * @param {Function} func - 要执行的函数
+ * @param {number} wait - 等待时间（毫秒）
+ * @returns {Function} - 防抖后的函数
+ */
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -57,40 +90,54 @@ function debounce(func, wait) {
     };
 }
 
+// ==================== 用户偏好管理 ====================
+
+/**
+ * 从 localStorage 加载用户偏好设置
+ */
 function loadUserPreferences() {
+    // 加载搜索引擎偏好
     const savedEngine = localStorage.getItem(STORAGE_KEYS.SEARCH_ENGINE);
     if (savedEngine) {
         const engine = searchEngines.find(e => e.name === savedEngine);
         if (engine) currentSearchEngine = engine;
     }
     
+    // 加载暗黑模式状态
     const savedDarkMode = localStorage.getItem(STORAGE_KEYS.DARK_MODE);
     if (savedDarkMode === 'true') {
         isDarkMode = true;
         document.body.classList.add('dark-mode');
     }
     
+    // 加载搜索历史
     const savedHistory = localStorage.getItem(STORAGE_KEYS.SEARCH_HISTORY);
     if (savedHistory) {
         searchHistory = JSON.parse(savedHistory);
     }
     
+    // 加载置顶网站
     const savedPinned = localStorage.getItem(STORAGE_KEYS.PINNED_SITES);
     if (savedPinned) {
         pinnedSites = JSON.parse(savedPinned);
     }
     
+    // 加载自定义网站
     const savedCustom = localStorage.getItem(STORAGE_KEYS.CUSTOM_SITES);
     if (savedCustom) {
         customSites = JSON.parse(savedCustom);
     }
     
+    // 加载访问统计
     const savedStats = localStorage.getItem(STORAGE_KEYS.VISIT_STATS);
     if (savedStats) {
         visitStats = JSON.parse(savedStats);
     }
 }
 
+/**
+ * 保存用户偏好设置到 localStorage
+ */
 function saveUserPreferences() {
     if (currentSearchEngine) {
         localStorage.setItem(STORAGE_KEYS.SEARCH_ENGINE, currentSearchEngine.name);
@@ -102,6 +149,11 @@ function saveUserPreferences() {
     localStorage.setItem(STORAGE_KEYS.VISIT_STATS, JSON.stringify(visitStats));
 }
 
+// ==================== 主题管理 ====================
+
+/**
+ * 切换暗黑模式
+ */
 function toggleDarkMode() {
     isDarkMode = !isDarkMode;
     document.body.classList.toggle('dark-mode', isDarkMode);
@@ -109,34 +161,50 @@ function toggleDarkMode() {
     updateThemeIcon();
 }
 
+/**
+ * 更新主题切换按钮图标
+ */
 function updateThemeIcon() {
     if (themeToggleBtn) {
         themeToggleBtn.textContent = isDarkMode ? '☀️' : '🌙';
     }
 }
 
+// ==================== 数据加载 ====================
+
+/**
+ * 加载JSON数据文件
+ * @returns {Promise<boolean>} - 是否加载成功
+ */
 async function loadData() {
     try {
         showLoading(true);
+        
+        // 并行加载所有数据文件
         const [searchEnginesRes, websitesRes, wallpapersRes] = await Promise.all([
             fetch('./data/searchEngines.json'),
             fetch('./data/websitesData.json'),
             fetch('./data/wallpapers.json')
         ]);
         
+        // 检查必要文件是否加载成功
         if (!searchEnginesRes.ok || !websitesRes.ok) {
             throw new Error('数据加载失败');
         }
         
+        // 解析JSON数据
         searchEngines = await searchEnginesRes.json();
         websitesData = await websitesRes.json();
         
+        // 壁纸数据可选
         if (wallpapersRes.ok) {
             wallpapersData = await wallpapersRes.json();
         }
         
+        // 设置默认搜索引擎
         currentSearchEngine = searchEngines[1] || searchEngines[0];
         
+        // 加载用户偏好
         loadUserPreferences();
         
         return true;
@@ -149,12 +217,21 @@ async function loadData() {
     }
 }
 
+/**
+ * 显示/隐藏加载动画
+ * @param {boolean} show - 是否显示
+ */
 function showLoading(show) {
     if (loadingElement) {
         loadingElement.style.display = show ? 'flex' : 'none';
     }
 }
 
+/**
+ * 显示提示消息
+ * @param {string} message - 消息内容
+ * @param {boolean} isSuccess - 是否为成功消息
+ */
 function showError(message, isSuccess = false) {
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-toast' + (isSuccess ? ' success-toast' : '');
@@ -163,13 +240,21 @@ function showError(message, isSuccess = false) {
     setTimeout(() => errorDiv.remove(), 3000);
 }
 
+// ==================== 时间与天气 ====================
+
+/**
+ * 更新页面时间和日期显示
+ */
 function updateDateTime() {
     const now = new Date();
+    
+    // 格式化时间 HH:MM:SS
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
     currentTimeElement.textContent = `${hours}:${minutes}:${seconds}`;
 
+    // 格式化日期 YYYY年MM月DD日 星期X
     const year = now.getFullYear();
     const month = (now.getMonth() + 1).toString().padStart(2, '0');
     const day = now.getDate().toString().padStart(2, '0');
@@ -178,24 +263,30 @@ function updateDateTime() {
     currentDateElement.textContent = `${year}年${month}月${day}日 ${weekday}`;
 }
 
+/**
+ * 加载天气信息（带缓存）
+ */
 async function loadWeather() {
     if (!weatherElement) return;
     
+    // 检查缓存（1小时有效期）
     const cached = localStorage.getItem(STORAGE_KEYS.WEATHER_CACHE);
     if (cached) {
         const { data, timestamp } = JSON.parse(cached);
-        const hour = 3600000;
+        const hour = 3600000; // 1小时的毫秒数
         if (Date.now() - timestamp < hour) {
             weatherElement.textContent = data;
             return;
         }
     }
     
+    // 请求天气API
     try {
         const response = await fetch('https://api.vvhan.com/api/weather');
         const data = await response.json();
         if (data && data.info) {
             weatherElement.textContent = data.info;
+            // 缓存天气数据
             localStorage.setItem(STORAGE_KEYS.WEATHER_CACHE, JSON.stringify({
                 data: data.info,
                 timestamp: Date.now()
@@ -206,10 +297,18 @@ async function loadWeather() {
     }
 }
 
+// ==================== 搜索引擎渲染 ====================
+
+/**
+ * 渲染搜索引擎选择下拉菜单
+ */
 function renderSearchEngines() {
     if (!currentSearchEngine) return;
     
+    // 设置当前搜索引擎图标
     searchIconElement.src = currentSearchEngine.icon;
+    
+    // 渲染下拉选项
     searchEnginesDropdown.innerHTML = searchEngines.map(engine => `
         <div class="search-engine-option" data-name="${engine.name}">
             <img src="${engine.icon}" alt="${engine.name}" loading="lazy">
@@ -218,6 +317,11 @@ function renderSearchEngines() {
     `).join('');
 }
 
+// ==================== 分类标签渲染 ====================
+
+/**
+ * 渲染分类标签页
+ */
 function renderCategoryTabs() {
     const categories = ['全部', ...categoriesData];
     categoryTabsElement.innerHTML = categories.map((category, index) => `
@@ -227,15 +331,24 @@ function renderCategoryTabs() {
     `).join('');
 }
 
+// ==================== 网站列表渲染 ====================
+
+/**
+ * 渲染网站列表
+ * @param {string} filterText - 筛选文本
+ */
 function renderWebsites(filterText = '') {
     const defaultIcon = 'https://image.songzq.cn/other/02cb165d016fa0c02e01fe2321325df9.jpg';
     
+    // 合并预设网站和自定义网站
     let allSites = [...websitesData, ...customSites];
     
+    // 按分类筛选
     let filteredWebsites = activeCategory === '全部'
         ? allSites
         : allSites.filter(website => website.categoryName === activeCategory);
     
+    // 按文本筛选
     if (filterText) {
         const lowerFilter = filterText.toLowerCase();
         filteredWebsites = filteredWebsites.filter(website => 
@@ -244,6 +357,7 @@ function renderWebsites(filterText = '') {
         );
     }
 
+    // 排序：置顶优先，然后按访问次数
     filteredWebsites.sort((a, b) => {
         const aPinned = pinnedSites.includes(a.url);
         const bPinned = pinnedSites.includes(b.url);
@@ -255,6 +369,7 @@ function renderWebsites(filterText = '') {
         return bVisits - aVisits;
     });
 
+    // 无结果时显示提示
     if (filteredWebsites.length === 0) {
         websitesGridElement.innerHTML = `
             <div class="no-results">
@@ -264,6 +379,7 @@ function renderWebsites(filterText = '') {
         return;
     }
 
+    // 渲染网站卡片
     websitesGridElement.innerHTML = filteredWebsites.map(website => {
         const isPinned = pinnedSites.includes(website.url);
         const visits = visitStats[website.url] || 0;
@@ -283,25 +399,36 @@ function renderWebsites(filterText = '') {
     }).join('');
 }
 
+// ==================== 搜索功能 ====================
+
+/**
+ * 执行搜索操作
+ */
 function performSearch() {
     if (!currentSearchEngine) return;
     
     const query = searchInput.value.trim();
     if (query) {
+        // 添加到搜索历史
         if (!searchHistory.includes(query)) {
             searchHistory.unshift(query);
             if (searchHistory.length > 10) searchHistory.pop();
             saveUserPreferences();
         }
         
+        // 打开搜索结果页
         window.open(currentSearchEngine.url + encodeURIComponent(query), '_blank');
         searchInput.value = '';
         searchSuggestionsElement.classList.remove('show');
     }
 }
 
+// 防抖处理的搜索输入处理函数
 const debouncedHandleSearchInput = debounce(handleSearchInput, 300);
 
+/**
+ * 处理搜索输入
+ */
 function handleSearchInput() {
     const query = searchInput.value.trim();
     if (query) {
@@ -311,6 +438,9 @@ function handleSearchInput() {
     }
 }
 
+/**
+ * 渲染搜索历史
+ */
 function renderSearchHistory() {
     if (searchHistory.length > 0) {
         searchSuggestionsElement.innerHTML = `
@@ -331,15 +461,21 @@ function renderSearchHistory() {
     }
 }
 
+/**
+ * 获取搜索建议（JSONP方式调用百度API）
+ * @param {string} query - 搜索关键词
+ */
 function getSearchSuggestions(query) {
     const callbackName = 'handleSuggestions_' + Date.now();
     const apiUrl = `https://suggestion.baidu.com/su?wd=${encodeURIComponent(query)}&cb=${callbackName}`;
 
+    // JSONP回调函数
     window[callbackName] = function (data) {
         if (data && data.s && Array.isArray(data.s)) {
             searchSuggestions = data.s.slice(0, 8).map(text => ({ text, desc: '', icon: '' }));
             renderSearchSuggestions();
         }
+        // 清理
         delete window[callbackName];
         const scriptEl = document.getElementById('suggestion_script');
         if (scriptEl && scriptEl.parentNode) {
@@ -347,11 +483,13 @@ function getSearchSuggestions(query) {
         }
     };
 
+    // 移除旧的script标签
     let script = document.getElementById('suggestion_script');
     if (script && script.parentNode) {
         script.parentNode.removeChild(script);
     }
     
+    // 创建新的script标签
     script = document.createElement('script');
     script.id = 'suggestion_script';
     script.src = apiUrl;
@@ -364,6 +502,9 @@ function getSearchSuggestions(query) {
     document.body.appendChild(script);
 }
 
+/**
+ * 渲染搜索建议列表
+ */
 function renderSearchSuggestions() {
     if (searchSuggestions.length > 0) {
         searchSuggestionsElement.innerHTML = searchSuggestions.map(suggestion => `
@@ -377,6 +518,11 @@ function renderSearchSuggestions() {
     }
 }
 
+// ==================== 壁纸管理 ====================
+
+/**
+ * 设置随机壁纸背景
+ */
 function setRandomBackground() {
     if (!wallpapersData.wallpapers || wallpapersData.wallpapers.length === 0) {
         setGradientBackground();
@@ -387,6 +533,10 @@ function setRandomBackground() {
     loadWallpaper(currentWallpaperIndex);
 }
 
+/**
+ * 加载指定索引的壁纸
+ * @param {number} index - 壁纸索引
+ */
 function loadWallpaper(index) {
     const selectedWallpaper = wallpapersData.wallpapers[index];
     
@@ -395,11 +545,15 @@ function loadWallpaper(index) {
         backgroundElement.style.backgroundImage = `url('${selectedWallpaper}')`;
     };
     img.onerror = function() {
+        // 壁纸加载失败时使用渐变背景
         setGradientBackground();
     };
     img.src = selectedWallpaper;
 }
 
+/**
+ * 设置渐变背景（壁纸加载失败时的后备方案）
+ */
 function setGradientBackground() {
     const gradients = wallpapersData.gradients || [
         'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -410,6 +564,9 @@ function setGradientBackground() {
     backgroundElement.style.background = randomGradient;
 }
 
+/**
+ * 切换到下一张壁纸
+ */
 function changeWallpaper() {
     if (!wallpapersData.wallpapers || wallpapersData.wallpapers.length === 0) {
         setGradientBackground();
@@ -420,6 +577,12 @@ function changeWallpaper() {
     loadWallpaper(currentWallpaperIndex);
 }
 
+// ==================== 网站置顶与统计 ====================
+
+/**
+ * 切换网站置顶状态
+ * @param {string} url - 网站URL
+ */
 function togglePin(url) {
     const index = pinnedSites.indexOf(url);
     if (index > -1) {
@@ -431,20 +594,35 @@ function togglePin(url) {
     renderWebsites(websiteSearchInput?.value || '');
 }
 
+/**
+ * 记录网站访问次数
+ * @param {string} url - 网站URL
+ */
 function recordVisit(url) {
     visitStats[url] = (visitStats[url] || 0) + 1;
     saveUserPreferences();
 }
 
+// ==================== 设置弹窗 ====================
+
+/**
+ * 打开设置弹窗
+ */
 function openSettings() {
     settingsModal.classList.add('show');
     updateStatsInfo();
 }
 
+/**
+ * 关闭设置弹窗
+ */
 function closeSettings() {
     settingsModal.classList.remove('show');
 }
 
+/**
+ * 更新统计信息显示
+ */
 function updateStatsInfo() {
     const statsInfo = document.getElementById('statsInfo');
     if (!statsInfo) return;
@@ -468,6 +646,11 @@ function updateStatsInfo() {
     `;
 }
 
+// ==================== 数据导入导出 ====================
+
+/**
+ * 导出用户配置为JSON文件
+ */
 function exportData() {
     const data = {
         searchEngine: currentSearchEngine?.name,
@@ -489,12 +672,17 @@ function exportData() {
     showError('配置已导出', true);
 }
 
+/**
+ * 从文件导入用户配置
+ * @param {File} file - JSON配置文件
+ */
 function importData(file) {
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
             const data = JSON.parse(e.target.result);
             
+            // 恢复各项配置
             if (data.searchEngine) {
                 const engine = searchEngines.find(e => e.name === data.searchEngine);
                 if (engine) currentSearchEngine = engine;
@@ -519,6 +707,9 @@ function importData(file) {
     reader.readAsText(file);
 }
 
+/**
+ * 清除所有数据
+ */
 function clearAllData() {
     if (confirm('确定要清除所有数据吗？此操作不可恢复。')) {
         localStorage.clear();
@@ -526,12 +717,20 @@ function clearAllData() {
     }
 }
 
+// ==================== 添加网站弹窗 ====================
+
+/**
+ * 打开添加网站弹窗
+ */
 function openAddWebsite() {
     const categorySelect = document.getElementById('newSiteCategory');
     categorySelect.innerHTML = categoriesData.map(cat => `<option value="${cat}">${cat}</option>`).join('');
     addWebsiteModal.classList.add('show');
 }
 
+/**
+ * 关闭添加网站弹窗
+ */
 function closeAddWebsite() {
     addWebsiteModal.classList.remove('show');
     document.getElementById('newSiteName').value = '';
@@ -539,22 +738,28 @@ function closeAddWebsite() {
     document.getElementById('newSiteDesc').value = '';
 }
 
+/**
+ * 保存新添加的网站
+ */
 function saveNewSite() {
     const name = document.getElementById('newSiteName').value.trim();
     const url = document.getElementById('newSiteUrl').value.trim();
     const desc = document.getElementById('newSiteDesc').value.trim();
     const category = document.getElementById('newSiteCategory').value;
     
+    // 验证必填字段
     if (!name || !url) {
         showError('请填写网站名称和地址');
         return;
     }
     
+    // 验证URL格式
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
         showError('网站地址必须以 http:// 或 https:// 开头');
         return;
     }
     
+    // 添加到自定义网站列表
     customSites.push({
         name,
         url,
@@ -569,12 +774,20 @@ function saveNewSite() {
     showError('网站已添加', true);
 }
 
+// ==================== 快捷键处理 ====================
+
+/**
+ * 处理键盘快捷键
+ * @param {KeyboardEvent} e - 键盘事件
+ */
 function handleKeyboardShortcuts(e) {
+    // '/' 键聚焦搜索框
     if (e.key === '/' && document.activeElement !== searchInput) {
         e.preventDefault();
         searchInput.focus();
     }
     
+    // Esc 键关闭所有弹窗
     if (e.key === 'Escape') {
         searchInput.blur();
         searchSuggestionsElement.classList.remove('show');
@@ -584,6 +797,7 @@ function handleKeyboardShortcuts(e) {
         addWebsiteModal.classList.remove('show');
     }
     
+    // Alt + 数字键切换分类
     if (e.altKey && e.key >= '0' && e.key <= '9') {
         e.preventDefault();
         const index = parseInt(e.key);
@@ -596,13 +810,20 @@ function handleKeyboardShortcuts(e) {
     }
 }
 
+// ==================== 事件监听初始化 ====================
+
+/**
+ * 初始化所有事件监听器
+ */
 function initEventListeners() {
+    // 搜索引擎按钮点击
     searchEngineBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         showSearchEngines = !showSearchEngines;
         searchEnginesDropdown.classList.toggle('show', showSearchEngines);
     });
 
+    // 搜索引擎下拉选项点击
     searchEnginesDropdown.addEventListener('click', (e) => {
         e.stopPropagation();
         const option = e.target.closest('.search-engine-option');
@@ -619,22 +840,27 @@ function initEventListeners() {
         }
     });
 
+    // 搜索按钮点击
     searchButton.addEventListener('click', performSearch);
 
+    // 搜索输入框回车
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             performSearch();
         }
     });
 
+    // 搜索输入框输入事件（防抖）
     searchInput.addEventListener('input', debouncedHandleSearchInput);
     
+    // 搜索输入框聚焦时显示历史
     searchInput.addEventListener('focus', () => {
         if (searchInput.value.trim() === '' && searchHistory.length > 0) {
             renderSearchHistory();
         }
     });
 
+    // 点击外部关闭下拉菜单
     document.addEventListener('click', (e) => {
         if (!searchEngineBtn.contains(e.target)) {
             searchEnginesDropdown.classList.remove('show');
@@ -646,18 +872,22 @@ function initEventListeners() {
         }
     });
     
+    // 键盘快捷键
     document.addEventListener('keydown', handleKeyboardShortcuts);
     
+    // 主题切换按钮
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', toggleDarkMode);
     }
     
+    // 网站筛选输入框
     if (websiteSearchInput) {
         websiteSearchInput.addEventListener('input', debounce((e) => {
             renderWebsites(e.target.value);
         }, 200));
     }
     
+    // 搜索建议点击
     searchSuggestionsElement.addEventListener('click', (e) => {
         const item = e.target.closest('.search-suggestion-item');
         if (item) {
@@ -666,6 +896,7 @@ function initEventListeners() {
             performSearch();
         }
         
+        // 清除历史按钮
         if (e.target.id === 'clearHistory') {
             searchHistory = [];
             saveUserPreferences();
@@ -673,6 +904,7 @@ function initEventListeners() {
         }
     });
     
+    // 分类标签点击
     categoryTabsElement.addEventListener('click', (e) => {
         const tab = e.target.closest('.category-tab');
         if (tab) {
@@ -682,7 +914,9 @@ function initEventListeners() {
         }
     });
     
+    // 网站卡片点击
     websitesGridElement.addEventListener('click', (e) => {
+        // 置顶按钮点击
         const pinBtn = e.target.closest('.pin-btn');
         if (pinBtn) {
             e.stopPropagation();
@@ -690,6 +924,7 @@ function initEventListeners() {
             return;
         }
         
+        // 网站卡片点击
         const item = e.target.closest('.website-item');
         if (item) {
             recordVisit(item.dataset.url);
@@ -697,18 +932,22 @@ function initEventListeners() {
         }
     });
     
+    // 壁纸切换按钮
     if (changeWallpaperBtn) {
         changeWallpaperBtn.addEventListener('click', changeWallpaper);
     }
     
+    // 添加网站按钮
     if (addWebsiteBtn) {
         addWebsiteBtn.addEventListener('click', openAddWebsite);
     }
     
+    // 设置按钮
     if (settingsBtn) {
         settingsBtn.addEventListener('click', openSettings);
     }
     
+    // 设置弹窗相关按钮
     document.getElementById('closeSettings')?.addEventListener('click', closeSettings);
     document.getElementById('closeAddWebsite')?.addEventListener('click', closeAddWebsite);
     document.getElementById('exportData')?.addEventListener('click', exportData);
@@ -724,6 +963,7 @@ function initEventListeners() {
     document.getElementById('saveNewSite')?.addEventListener('click', saveNewSite);
     document.getElementById('cancelNewSite')?.addEventListener('click', closeAddWebsite);
     
+    // 点击弹窗背景关闭
     settingsModal?.addEventListener('click', (e) => {
         if (e.target === settingsModal) closeSettings();
     });
@@ -732,22 +972,35 @@ function initEventListeners() {
     });
 }
 
+// ==================== 初始化 ====================
+
+/**
+ * 页面初始化入口函数
+ */
 async function init() {
+    // 设置随机背景
     setRandomBackground();
 
+    // 启动时间更新
     updateDateTime();
     setInterval(updateDateTime, 1000);
     
+    // 加载天气
     loadWeather();
 
+    // 加载数据
     const loaded = await loadData();
     if (loaded) {
+        // 更新主题图标
         updateThemeIcon();
+        // 渲染页面
         renderSearchEngines();
         renderCategoryTabs();
         renderWebsites();
+        // 初始化事件监听
         initEventListeners();
         
+        // 注册 Service Worker（PWA支持）
         if ('serviceWorker' in navigator) {
             try {
                 await navigator.serviceWorker.register('./sw.js');
@@ -758,4 +1011,5 @@ async function init() {
     }
 }
 
+// DOM加载完成后初始化
 document.addEventListener('DOMContentLoaded', init);

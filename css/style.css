@@ -1,3 +1,17 @@
+/**
+ * 正清の导航页 - 样式文件
+ * 
+ * 主要包含：
+ * - 基础样式重置
+ * - 暗黑模式样式
+ * - 搜索框样式
+ * - 网站卡片样式
+ * - 弹窗样式
+ * - 响应式布局
+ */
+
+/* ==================== 基础样式重置 ==================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -11,10 +25,13 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
+/* 暗黑模式 */
 body.dark-mode {
     background-color: #1a1a2e;
     color: #e0e0e0;
 }
+
+/* ==================== 页面容器 ==================== */
 
 .app-container {
     width: 100%;
@@ -26,6 +43,7 @@ body.dark-mode {
     height: 100%;
 }
 
+/* 背景图片容器 */
 .background {
     position: fixed;
     top: 0;
@@ -39,6 +57,7 @@ body.dark-mode {
     transition: opacity 0.5s;
 }
 
+/* 主内容容器 */
 .container {
     max-width: 1500px;
     margin: 0 auto;
@@ -49,6 +68,8 @@ body.dark-mode {
     align-items: center;
     position: relative;
 }
+
+/* ==================== 加载动画 ==================== */
 
 .loading {
     position: fixed;
@@ -68,6 +89,7 @@ body.dark-mode .loading {
     background: rgba(26, 26, 46, 0.95);
 }
 
+/* 加载旋转动画 */
 .loading-spinner {
     width: 50px;
     height: 50px;
@@ -92,6 +114,9 @@ body.dark-mode .loading p {
     color: #aaa;
 }
 
+/* ==================== 提示消息 ==================== */
+
+/* 错误提示 */
 .error-toast {
     position: fixed;
     top: 20px;
@@ -105,6 +130,7 @@ body.dark-mode .loading p {
     animation: slideDown 0.3s ease;
 }
 
+/* 成功提示 */
 .success-toast {
     background: #4caf50;
 }
@@ -120,6 +146,8 @@ body.dark-mode .loading p {
     }
 }
 
+/* ==================== 页面头部 ==================== */
+
 .header-row {
     display: flex;
     align-items: flex-start;
@@ -128,6 +156,7 @@ body.dark-mode .loading p {
     margin-bottom: 30px;
 }
 
+/* 时间日期区域 */
 .time-date {
     text-align: center;
     color: white;
@@ -152,11 +181,13 @@ body.dark-mode .loading p {
     opacity: 0.9;
 }
 
+/* 头部操作按钮区域 */
 .header-actions {
     display: flex;
     gap: 8px;
 }
 
+/* 操作按钮（主题切换、壁纸切换、添加网站、设置） */
 .action-btn {
     background: rgba(255, 255, 255, 0.2);
     border: none;
@@ -173,6 +204,8 @@ body.dark-mode .loading p {
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
 }
+
+/* ==================== 搜索框 ==================== */
 
 .search-container {
     margin-bottom: 20px;
@@ -195,6 +228,7 @@ body.dark-mode .search-box {
     background: rgba(40, 40, 60, 0.95);
 }
 
+/* 搜索引擎选择器 */
 .search-engine {
     position: relative;
     margin-right: 15px;
@@ -207,6 +241,7 @@ body.dark-mode .search-box {
     border-radius: 50%;
 }
 
+/* 搜索引擎下拉菜单 */
 .search-engines-dropdown {
     position: absolute;
     top: 100%;
@@ -232,6 +267,7 @@ body.dark-mode .search-engines-dropdown {
     display: grid;
 }
 
+/* 搜索引擎选项 */
 .search-engine-option {
     display: flex;
     align-items: center;
@@ -257,6 +293,7 @@ body.dark-mode .search-engine-option:hover {
     margin-right: 10px;
 }
 
+/* 搜索输入框 */
 .search-input {
     flex: 1;
     border: none;
@@ -275,6 +312,7 @@ body.dark-mode .search-input {
     color: #999;
 }
 
+/* 搜索按钮 */
 .search-button {
     background: none;
     border: none;
@@ -282,6 +320,8 @@ body.dark-mode .search-input {
     padding: 5px;
     font-size: 16px;
 }
+
+/* ==================== 搜索建议 ==================== */
 
 .search-suggestions {
     position: absolute;
@@ -306,6 +346,7 @@ body.dark-mode .search-suggestions {
     display: block;
 }
 
+/* 搜索历史头部 */
 .search-history-header {
     display: flex;
     justify-content: space-between;
@@ -332,6 +373,7 @@ body.dark-mode .search-history-header {
     text-decoration: underline;
 }
 
+/* 搜索建议项 */
 .search-suggestion-item {
     display: flex;
     align-items: center;
@@ -363,6 +405,8 @@ body.dark-mode .search-suggestion-item:hover {
     margin-right: 10px;
 }
 
+/* ==================== 分类标签 ==================== */
+
 .category-header {
     display: flex;
     align-items: center;
@@ -380,6 +424,7 @@ body.dark-mode .search-suggestion-item:hover {
     justify-content: center;
 }
 
+/* 分类标签按钮 */
 .category-tab {
     padding: 8px 16px;
     border: none;
@@ -404,11 +449,13 @@ body.dark-mode .category-tab:hover {
     background: rgba(80, 80, 100, 0.9);
 }
 
+/* 激活状态的分类标签 */
 .category-tab.active {
     background: #4a90e2;
     color: white;
 }
 
+/* 网站筛选输入框 */
 .website-search-box {
     width: 200px;
 }
@@ -438,6 +485,8 @@ body.dark-mode .website-search-input:focus {
     background: rgba(80, 80, 100, 0.95);
 }
 
+/* ==================== 网站列表 ==================== */
+
 .websites-container {
     flex: 1;
     width: 100%;
@@ -454,11 +503,14 @@ body.dark-mode .websites-container {
     background: rgba(30, 30, 50, 0.9);
 }
 
+/* 网站网格布局 */
 .websites-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
 }
+
+/* ==================== 网站卡片 ==================== */
 
 .website-item {
     display: flex;
@@ -482,6 +534,7 @@ body.dark-mode .website-item {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+/* 置顶状态的网站卡片 */
 .website-item.pinned {
     border: 2px solid #4a90e2;
 }
@@ -494,6 +547,7 @@ body.dark-mode .website-item {
     font-size: 12px;
 }
 
+/* 置顶按钮 */
 .website-item .pin-btn {
     position: absolute;
     top: 5px;
@@ -510,6 +564,7 @@ body.dark-mode .website-item {
     opacity: 1;
 }
 
+/* 网站图标 */
 .website-icon {
     width: 60px;
     height: 60px;
@@ -532,6 +587,7 @@ body.dark-mode .website-icon {
     object-fit: contain;
 }
 
+/* 网站信息 */
 .website-info {
     flex: 1;
     display: flex;
@@ -571,12 +627,14 @@ body.dark-mode .website-desc {
     color: #aaa;
 }
 
+/* 访问统计 */
 .website-stats {
     font-size: 10px;
     color: #999;
     margin-top: 2px;
 }
 
+/* 无结果提示 */
 .no-results {
     grid-column: 1 / -1;
     text-align: center;
@@ -587,6 +645,8 @@ body.dark-mode .website-desc {
 body.dark-mode .no-results {
     color: #777;
 }
+
+/* ==================== 弹窗样式 ==================== */
 
 .modal {
     display: none;
@@ -659,6 +719,8 @@ body.dark-mode .modal-close:hover {
     padding: 20px;
 }
 
+/* ==================== 设置弹窗 ==================== */
+
 .settings-section {
     margin-bottom: 20px;
 }
@@ -694,6 +756,7 @@ body.dark-mode .settings-section h4 {
     background: #3a7bc8;
 }
 
+/* 危险操作按钮（清除数据） */
 .settings-btn.danger {
     background: #ff4444;
 }
@@ -702,6 +765,7 @@ body.dark-mode .settings-section h4 {
     background: #cc3333;
 }
 
+/* 统计信息 */
 .stats-info {
     background: #f5f5f5;
     padding: 15px;
@@ -713,6 +777,8 @@ body.dark-mode .settings-section h4 {
 body.dark-mode .stats-info {
     background: #3a3a5a;
 }
+
+/* ==================== 表单样式 ==================== */
 
 .form-group {
     margin-bottom: 15px;
@@ -781,6 +847,8 @@ body.dark-mode .btn-secondary {
     color: #e0e0e0;
 }
 
+/* ==================== 页脚 ==================== */
+
 .footer {
     margin-top: 15px;
     color: white;
@@ -789,6 +857,9 @@ body.dark-mode .btn-secondary {
     text-align: center;
 }
 
+/* ==================== 响应式布局 ==================== */
+
+/* 大屏幕（<=1500px）：4列 */
 @media (max-width: 1500px) {
     .websites-grid {
         grid-template-columns: repeat(4, 1fr);
@@ -796,6 +867,7 @@ body.dark-mode .btn-secondary {
     }
 }
 
+/* 中等屏幕（<=992px）：3列 */
 @media (max-width: 992px) {
     .websites-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -807,6 +879,7 @@ body.dark-mode .btn-secondary {
     }
 }
 
+/* 平板（<=768px）：2列 */
 @media (max-width: 768px) {
     .container {
         padding: 10px;
@@ -871,6 +944,7 @@ body.dark-mode .btn-secondary {
     }
 }
 
+/* 手机（<=480px）：1列 */
 @media (max-width: 480px) {
     .websites-grid {
         grid-template-columns: 1fr;
