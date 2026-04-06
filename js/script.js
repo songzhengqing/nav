@@ -284,11 +284,12 @@ async function loadWeather() {
     try {
         const response = await fetch('https://api.vvhan.com/api/weather');
         const data = await response.json();
-        if (data && data.info) {
-            weatherElement.textContent = data.info;
+        if (data && data.success) {
+            const weatherText = `${data.city} ${data.weather.day.type} ${data.weather.day.low}~${data.weather.day.high}`;
+            weatherElement.textContent = weatherText;
             // 缓存天气数据
             localStorage.setItem(STORAGE_KEYS.WEATHER_CACHE, JSON.stringify({
-                data: data.info,
+                data: weatherText,
                 timestamp: Date.now()
             }));
         }
