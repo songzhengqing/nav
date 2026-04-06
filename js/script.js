@@ -273,27 +273,44 @@ async function loadWeather() {
     const cached = localStorage.getItem(STORAGE_KEYS.WEATHER_CACHE);
     if (cached) {
         const { data, timestamp } = JSON.parse(cached);
-        const hour = 3600000; // 1小时的毫秒数
+        const hour = 3600000;
         if (Date.now() - timestamp < hour) {
             weatherElement.textContent = data;
             return;
         }
     }
     
-    // 请求天气API
+    // 天气代码映射 (WMO Code)
+    const weatherCodeMap = {
+        0: '晴', 1: '晴', 2: '少云', 3: '多云',
+        45: '雾', 48: '雾凇',
+        51: '毛毛雨', 53: '毛毛雨', 55: '毛毛雨',
+        61: '小雨', 63: '中雨', 65: '大雨',
+        66: '冻雨', 67: '冻雨',
+        71: '小雪', 73: '中雪', 75: '大雪', 77: '雪粒',
+        80: '阵雨', 81: '阵雨', 82: '暴雨',
+        85: '阵雪', 86: '阵雪',
+        95: '雷阵雨', 96: '雷阵雨伴冰雹', 99: '强雷阵雨'
+    };
+    
+    // 使用 Open-Meteo API（广州坐标）
     try {
-        const response = await fetch('https://api.vvhan.com/api/weather');
+        const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.13&longitude=113.27&current=temperature_2m,weather_code&timezone=Asia/Shanghai');
         const data = await response.json();
-        if (data && data.success) {
-            const weatherText = `${data.city} ${data.weather.day.type} ${data.weather.day.low}~${data.weather.day.high}`;
-            weatherElement.textContent = weatherText;
+        if (data && data.current) {
+            const temp = Math.round(data.current.temperature_2m);
+            const weatherCode = data.current.weather_code;
+            const weatherText = weatherCodeMap[weatherCode] || '未知';
+            const displayText = `${weatherText} ${temp}°C`;
+            weatherElement.textContent = displayText;
             // 缓存天气数据
             localStorage.setItem(STORAGE_KEYS.WEATHER_CACHE, JSON.stringify({
-                data: weatherText,
+                data: displayText,
                 timestamp: Date.now()
             }));
         }
     } catch (error) {
+        console.log('天气加载失败:', error);
         weatherElement.textContent = '';
     }
 }
