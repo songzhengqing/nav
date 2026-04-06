@@ -252,6 +252,13 @@
         "categoryName": "境外网站"
     },
     {
+        "name": "Yandex Mail",
+        "url": "https://mail.yandex.com/",
+        "icon": "https://image.songzq.cn/logo/yandex-mail.ico",
+        "desc": "雅虎邮箱服务",
+        "categoryName": "境外网站"
+    },
+    {
         "name": "Instagram",
         "url": "https://www.instagram.com/",
         "icon": "https://image.songzq.cn/logo/instagram.webp",
