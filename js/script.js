@@ -538,17 +538,49 @@ function renderSearchSuggestions() {
 
 // ==================== 壁纸管理 ====================
 
+const DEFAULT_WALLPAPER = 'https://image.songzq.cn/wallpaper/003.jpg';
+
 /**
- * 设置随机壁纸背景
+ * 设置壁纸背景（优先使用默认壁纸）
  */
 function setRandomBackground() {
-    if (!wallpapersData.wallpapers || wallpapersData.wallpapers.length === 0) {
-        setGradientBackground();
-        return;
-    }
-    
-    currentWallpaperIndex = Math.floor(Math.random() * wallpapersData.wallpapers.length);
-    loadWallpaper(currentWallpaperIndex);
+    loadWallpaperWithFallback(DEFAULT_WALLPAPER);
+}
+
+/**
+ * 加载壁纸，失败时尝试其他壁纸
+ * @param {string} wallpaperUrl - 壁纸URL
+ * @param {number} fallbackIndex - 失败后尝试的壁纸索引
+ */
+function loadWallpaperWithFallback(wallpaperUrl, fallbackIndex = 0) {
+    const img = new Image();
+    img.onload = function() {
+        backgroundElement.style.backgroundImage = `url('${wallpaperUrl}')`;
+        const idx = wallpapersData.wallpapers?.indexOf(wallpaperUrl);
+        if (idx !== -1) {
+            currentWallpaperIndex = idx;
+        }
+    };
+    img.onerror = function() {
+        if (fallbackIndex === 0 && wallpaperUrl === DEFAULT_WALLPAPER) {
+            const otherWallpapers = wallpapersData.wallpapers?.filter(w => w !== DEFAULT_WALLPAPER) || [];
+            if (otherWallpapers.length > 0) {
+                loadWallpaperWithFallback(otherWallpapers[0], 1);
+            } else {
+                setGradientBackground();
+            }
+        } else if (wallpapersData.wallpapers && fallbackIndex < wallpapersData.wallpapers.length) {
+            const nextWallpaper = wallpapersData.wallpapers[fallbackIndex];
+            if (nextWallpaper !== DEFAULT_WALLPAPER) {
+                loadWallpaperWithFallback(nextWallpaper, fallbackIndex + 1);
+            } else {
+                loadWallpaperWithFallback(nextWallpaper, fallbackIndex + 1);
+            }
+        } else {
+            setGradientBackground();
+        }
+    };
+    img.src = wallpaperUrl;
 }
 
 /**
@@ -556,17 +588,13 @@ function setRandomBackground() {
  * @param {number} index - 壁纸索引
  */
 function loadWallpaper(index) {
-    const selectedWallpaper = wallpapersData.wallpapers[index];
-    
-    const img = new Image();
-    img.onload = function() {
-        backgroundElement.style.backgroundImage = `url('${selectedWallpaper}')`;
-    };
-    img.onerror = function() {
-        // 壁纸加载失败时使用渐变背景
+    if (!wallpapersData.wallpapers || wallpapersData.wallpapers.length === 0) {
         setGradientBackground();
-    };
-    img.src = selectedWallpaper;
+        return;
+    }
+    
+    const selectedWallpaper = wallpapersData.wallpapers[index];
+    loadWallpaperWithFallback(selectedWallpaper);
 }
 
 /**
