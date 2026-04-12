@@ -371,6 +371,13 @@
         "categoryName": "软件"
     },
     {
+        "name": "DeskPins",
+        "url": "https://deskpins.cn/index.html",
+        "icon": "https://image.songzq.cn/logo/deskpins.ico",
+        "desc": "windows窗口置顶",
+        "categoryName": "软件"
+    },
+    {
         "name": "知网",
         "url": "https://www.cnki.net/",
         "icon": "https://image.songzq.cn/logo/cnki.ico",
