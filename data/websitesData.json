@@ -462,6 +462,13 @@
         "categoryName": "其它"
     },
     {
+        "name": "QwenPaw",
+        "url": "https://qwenpaw.agentscope.io/",
+        "icon": "https://image.songzq.cn/logo/qwenpaw.svg",
+        "desc": "QwenPawAI助手-Works for you, grows with you.",
+        "categoryName": "其它"
+    },
+    {
         "name": "彼岸图网",
         "url": "https://pic.netbian.com/",
         "icon": "https://image.songzq.cn/logo/netbian.ico",
