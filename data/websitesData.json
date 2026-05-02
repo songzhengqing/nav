@@ -70,6 +70,13 @@
         "categoryName": "工作"
     },
     {
+        "name": "金山文档",
+        "url": "https://www.kdocs.cn/",
+        "icon": "https://image.songzq.cn/logo/kdocs.svg",
+        "desc": "在线文档协作平台",
+        "categoryName": "工作"
+    },
+    {
         "name": "爱奇艺",
         "url": "https://www.iqiyi.com",
         "icon": "https://image.songzq.cn/logo/iqiyi.ico",
