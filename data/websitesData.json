@@ -488,5 +488,12 @@
         "icon": "https://image.songzq.cn/logo/ymyouli.ico",
         "desc": "HIFI发烧音乐与8K动漫壁纸资源",
         "categoryName": "壁纸"
+    },
+    {
+        "name": "GLM",
+        "url": "https://chat.z.ai/",
+        "icon": "https://image.songzq.cn/logo/glm.svg",
+        "desc": " ",
+        "categoryName": "AI"
     }
 ]
