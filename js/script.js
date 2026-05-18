@@ -6,7 +6,6 @@
  * - 网站分类导航
  * - 暗黑模式
  * - 网站置顶
- * - 访问统计
  * - 数据导入导出
  * - PWA支持
  */
@@ -31,7 +30,6 @@ let searchHistory = [];             // 搜索历史记录
 let isDarkMode = false;             // 是否为暗黑模式
 let pinnedSites = [];               // 置顶网站URL列表
 let customSites = [];               // 用户自定义网站列表
-let visitStats = {};                // 网站访问统计 { url: count }
 let currentWallpaperIndex = 0;      // 当前壁纸索引
 
 // ==================== DOM 元素引用 ====================
@@ -66,7 +64,6 @@ const STORAGE_KEYS = {
     SEARCH_HISTORY: 'nav_search_history',   // 搜索历史
     PINNED_SITES: 'nav_pinned_sites',       // 置顶网站
     CUSTOM_SITES: 'nav_custom_sites',       // 自定义网站
-    VISIT_STATS: 'nav_visit_stats',         // 访问统计
     WEATHER_CACHE: 'nav_weather_cache'      // 天气缓存
 };
 
@@ -127,12 +124,6 @@ function loadUserPreferences() {
     if (savedCustom) {
         customSites = JSON.parse(savedCustom);
     }
-    
-    // 加载访问统计
-    const savedStats = localStorage.getItem(STORAGE_KEYS.VISIT_STATS);
-    if (savedStats) {
-        visitStats = JSON.parse(savedStats);
-    }
 }
 
 /**
@@ -146,7 +137,6 @@ function saveUserPreferences() {
     localStorage.setItem(STORAGE_KEYS.SEARCH_HISTORY, JSON.stringify(searchHistory));
     localStorage.setItem(STORAGE_KEYS.PINNED_SITES, JSON.stringify(pinnedSites));
     localStorage.setItem(STORAGE_KEYS.CUSTOM_SITES, JSON.stringify(customSites));
-    localStorage.setItem(STORAGE_KEYS.VISIT_STATS, JSON.stringify(visitStats));
 }
 
 // ==================== 主题管理 ====================
@@ -370,21 +360,17 @@ function renderWebsites(filterText = '') {
     if (filterText) {
         const lowerFilter = filterText.toLowerCase();
         filteredWebsites = filteredWebsites.filter(website => 
-            website.name.toLowerCase().includes(lowerFilter) ||
-            website.desc.toLowerCase().includes(lowerFilter)
+            website.name.toLowerCase().includes(lowerFilter)
         );
     }
 
-    // 排序：置顶优先，然后按访问次数
+    // 排序：置顶优先
     filteredWebsites.sort((a, b) => {
         const aPinned = pinnedSites.includes(a.url);
         const bPinned = pinnedSites.includes(b.url);
         if (aPinned && !bPinned) return -1;
         if (!aPinned && bPinned) return 1;
-        
-        const aVisits = visitStats[a.url] || 0;
-        const bVisits = visitStats[b.url] || 0;
-        return bVisits - aVisits;
+        return 0;
     });
 
     // 无结果时显示提示
@@ -400,7 +386,6 @@ function renderWebsites(filterText = '') {
     // 渲染网站卡片
     websitesGridElement.innerHTML = filteredWebsites.map(website => {
         const isPinned = pinnedSites.includes(website.url);
-        const visits = visitStats[website.url] || 0;
         return `
             <div class="website-item ${isPinned ? 'pinned' : ''}" data-url="${website.url}">
                 <button class="pin-btn" data-url="${website.url}" title="${isPinned ? '取消置顶' : '置顶'}">${isPinned ? '📌' : '📍'}</button>
@@ -409,8 +394,6 @@ function renderWebsites(filterText = '') {
                 </div>
                 <div class="website-info">
                     <div class="website-name">${website.name}</div>
-                    <div class="website-desc">${website.desc}</div>
-                    ${visits > 0 ? `<div class="website-stats">访问 ${visits} 次</div>` : ''}
                 </div>
             </div>
         `;
@@ -623,7 +606,7 @@ function changeWallpaper() {
     loadWallpaper(currentWallpaperIndex);
 }
 
-// ==================== 网站置顶与统计 ====================
+// ==================== 网站置顶 ====================
 
 /**
  * 切换网站置顶状态
@@ -640,15 +623,6 @@ function togglePin(url) {
     renderWebsites(websiteSearchInput?.value || '');
 }
 
-/**
- * 记录网站访问次数
- * @param {string} url - 网站URL
- */
-function recordVisit(url) {
-    visitStats[url] = (visitStats[url] || 0) + 1;
-    saveUserPreferences();
-}
-
 // ==================== 设置弹窗 ====================
 
 /**
@@ -656,7 +630,6 @@ function recordVisit(url) {
  */
 function openSettings() {
     settingsModal.classList.add('show');
-    updateStatsInfo();
 }
 
 /**
@@ -664,32 +637,6 @@ function openSettings() {
  */
 function closeSettings() {
     settingsModal.classList.remove('show');
-}
-
-/**
- * 更新统计信息显示
- */
-function updateStatsInfo() {
-    const statsInfo = document.getElementById('statsInfo');
-    if (!statsInfo) return;
-    
-    const totalVisits = Object.values(visitStats).reduce((a, b) => a + b, 0);
-    const topSites = Object.entries(visitStats)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
-    
-    statsInfo.innerHTML = `
-        <p>总访问次数: ${totalVisits}</p>
-        <p>置顶网站: ${pinnedSites.length} 个</p>
-        <p>自定义网站: ${customSites.length} 个</p>
-        ${topSites.length > 0 ? `
-            <p style="margin-top: 10px;">最常访问:</p>
-            ${topSites.map(([url, count]) => {
-                const site = [...websitesData, ...customSites].find(s => s.url === url);
-                return `<p>• ${site ? site.name : url}: ${count} 次</p>`;
-            }).join('')}
-        ` : ''}
-    `;
 }
 
 // ==================== 数据导入导出 ====================
@@ -704,7 +651,6 @@ function exportData() {
         searchHistory: searchHistory,
         pinnedSites: pinnedSites,
         customSites: customSites,
-        visitStats: visitStats,
         exportTime: new Date().toISOString()
     };
     
@@ -740,7 +686,6 @@ function importData(file) {
             if (data.searchHistory) searchHistory = data.searchHistory;
             if (data.pinnedSites) pinnedSites = data.pinnedSites;
             if (data.customSites) customSites = data.customSites;
-            if (data.visitStats) visitStats = data.visitStats;
             
             saveUserPreferences();
             updateThemeIcon();
@@ -781,7 +726,6 @@ function closeAddWebsite() {
     addWebsiteModal.classList.remove('show');
     document.getElementById('newSiteName').value = '';
     document.getElementById('newSiteUrl').value = '';
-    document.getElementById('newSiteDesc').value = '';
 }
 
 /**
@@ -790,27 +734,22 @@ function closeAddWebsite() {
 function saveNewSite() {
     const name = document.getElementById('newSiteName').value.trim();
     const url = document.getElementById('newSiteUrl').value.trim();
-    const desc = document.getElementById('newSiteDesc').value.trim();
     const category = document.getElementById('newSiteCategory').value;
     
-    // 验证必填字段
     if (!name || !url) {
         showError('请填写网站名称和地址');
         return;
     }
     
-    // 验证URL格式
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
         showError('网站地址必须以 http:// 或 https:// 开头');
         return;
     }
     
-    // 添加到自定义网站列表
     customSites.push({
         name,
         url,
         icon: '',
-        desc: desc || name,
         categoryName: category
     });
     
@@ -973,7 +912,6 @@ function initEventListeners() {
         // 网站卡片点击
         const item = e.target.closest('.website-item');
         if (item) {
-            recordVisit(item.dataset.url);
             window.open(item.dataset.url, '_blank');
         }
     });
